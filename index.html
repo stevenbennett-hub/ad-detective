@@ -1,0 +1,1439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ad Detective: The Art of Persuasion</title>
+<meta name="description" content="Investigate the persuasion behind six fictional advertisements: appeals, fallacies, misleading claims, and ethical persuasion.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230F1626'/%3E%3Ccircle cx='13' cy='13' r='8' fill='none' stroke='%23EEF2F8' stroke-width='3'/%3E%3Cpath d='M19 19l8 8' stroke='%23EEF2F8' stroke-width='3.4' stroke-linecap='round'/%3E%3Cpath d='M9 13h8' stroke='%23F5B83D' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+@font-face { font-family: "Atkinson Hyperlegible Next"; font-style: normal; font-weight: 400; font-display: swap; src: url(assets/fonts/atkinson-hyperlegible-next-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible Next"; font-style: normal; font-weight: 700; font-display: swap; src: url(assets/fonts/atkinson-hyperlegible-next-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 200 800; font-display: swap; src: url(assets/fonts/bricolage-grotesque-latin-wght-normal.woff2) format("woff2-variations"); }
+/* Ad Detective — design tokens. Accents always mean the same thing:
+   amber = evidence you marked / an appeal; coral = a flaw or misleading claim; teal = sound reasoning. */
+:root {
+  --bg: #0F1626; --panel: #172036; --panel2: #1E2943; --line: #33415F;
+  --text: #EEF2F8; --muted: #AEB9CD;
+  --evidence: #F5B83D; --flaw: #FF8270; --sound: #52D6BC; --focus: #FFE08A;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", Verdana, system-ui, sans-serif;
+  --r-sm: 6px; --r-md: 12px; --r-lg: 20px;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: 90px; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+a { color: var(--evidence); text-underline-offset: 3px; }
+a:hover { color: var(--focus); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3, h4 { font-family: var(--display); line-height: 1.12; margin: 0 0 .5em; letter-spacing: -.01em; }
+h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; }
+h2 { font-size: 1.6rem; font-weight: 750; }
+h3 { font-size: 1.2rem; font-weight: 700; }
+p { margin: 0 0 1em; }
+.wrap { width: min(1180px, 100% - 40px); margin-inline: auto; }
+.sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.muted { color: var(--muted); }
+.lead { font-size: 1.12rem; max-width: 68ch; }
+.skip { position: absolute; left: 12px; top: -60px; background: var(--evidence); color: var(--bg); padding: 10px 16px; border-radius: var(--r-sm); font-weight: 700; z-index: 50; }
+.skip:focus { top: 12px; }
+.warn { background: #3A2A12; border: 1px solid var(--evidence); padding: 10px 14px; border-radius: var(--r-sm); margin-top: 10px; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 9px 18px; border-radius: 999px; border: 2px solid var(--line); background: var(--panel2); color: var(--text); font: 700 1rem var(--body); cursor: pointer; text-decoration: none; }
+.btn:hover { border-color: var(--muted); color: var(--text); }
+.btn.primary { background: var(--evidence); border-color: var(--evidence); color: #1A1306; }
+.btn.primary:hover { background: var(--focus); border-color: var(--focus); color: #1A1306; }
+.btn.danger { border-color: var(--flaw); color: var(--flaw); background: transparent; }
+.btn.sm { min-height: 38px; padding: 6px 14px; font-size: .95rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.linkbtn { background: none; border: 0; padding: 4px 0; color: var(--evidence); font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; text-align: left; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 14px 0; }
+
+/* Top bar */
+.top { position: sticky; top: 0; z-index: 20; background: rgba(15, 22, 38, .94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.topin { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; padding: 10px 0; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
+.brand b { display: block; font: 800 1.2rem var(--display); }
+.brand small { display: block; color: var(--muted); font-size: .8rem; }
+.top nav ul { display: flex; flex-wrap: wrap; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.top nav a { display: block; padding: 8px 12px; border-radius: 999px; color: var(--text); text-decoration: none; font-weight: 700; }
+.top nav a:hover { background: var(--panel2); }
+.top nav a[aria-current="page"] { background: var(--panel2); box-shadow: inset 0 -3px 0 var(--evidence); }
+.switches { display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+.seg { display: inline-flex; border: 2px solid var(--line); border-radius: 999px; padding: 2px; }
+.seg button { border: 0; background: none; color: var(--muted); font: 700 .88rem var(--body); padding: 6px 12px; border-radius: 999px; cursor: pointer; min-height: 34px; }
+.seg button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
+
+/* Hero */
+.hero { padding: 46px 0 36px; border-bottom: 1px solid var(--line); background: radial-gradient(1200px 500px at 85% 0%, #1F2C4D 0%, transparent 60%); }
+.herogrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 40px; align-items: center; }
+.herotext h1 { font-size: clamp(3rem, 7vw, 5.6rem); font-weight: 800; letter-spacing: -.035em; line-height: .95; margin-bottom: .2em; }
+.herotext .sub { font: 600 1.35rem/1.3 var(--display); color: var(--evidence); max-width: 26ch; }
+.herotext .lede { color: var(--muted); max-width: 52ch; }
+.specimen { margin: 0; }
+.frame { position: relative; aspect-ratio: 16 / 10; border-radius: var(--r-lg); overflow: hidden; background: linear-gradient(160deg, #241808 0%, #0A0E18 70%); border: 1px solid var(--line); }
+.beam { position: absolute; inset: -20% 25% 0 35%; background: radial-gradient(closest-side, rgba(245, 184, 61, .35), transparent); filter: blur(10px); }
+.bottle { position: absolute; left: 46%; top: 16%; height: 66%; fill: #E9A23B; stroke: #FFD48A; stroke-width: 1.2; }
+.bottle .lbl { fill: #2A1A05; }
+.slogan { position: absolute; left: 6%; bottom: 14%; max-width: 38%; line-height: 1.05; margin: 0; font: 800 clamp(1.3rem, 2.6vw, 2.1rem) var(--display); letter-spacing: -.02em; color: #FFF3DC; }
+.fine { position: absolute; left: 6%; bottom: 7%; margin: 0; font-size: .72rem; color: #CDBFA6; }
+.note { position: absolute; max-width: 40%; padding: 8px 12px; border-radius: var(--r-sm); background: rgba(10, 14, 24, .92); font-size: .86rem; line-height: 1.35; border-left: 4px solid; opacity: 0; transform: translateY(6px); }
+.note i { display: block; font-style: normal; font-weight: 700; font-size: .78rem; }
+.n1 { right: 4%; top: 8%; border-color: var(--evidence); } .n1 i { color: var(--evidence); }
+.n2 { right: 4%; top: 40%; border-color: var(--flaw); } .n2 i { color: var(--flaw); }
+.n3 { right: 4%; bottom: 6%; border-color: var(--sound); } .n3 i { color: var(--sound); }
+.specimen.play .note { animation: noteIn .5s ease forwards; }
+.specimen.play .n1 { animation-delay: .5s; } .specimen.play .n2 { animation-delay: 1.4s; } .specimen.play .n3 { animation-delay: 2.3s; }
+.specimen.still .note { opacity: 1; transform: none; }
+@keyframes noteIn { to { opacity: 1; transform: none; } }
+.specimen figcaption { margin-top: 10px; color: var(--muted); font-size: .92rem; }
+
+/* Home blocks */
+.block { padding: 40px 0 10px; }
+.caselist { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
+.caserow { display: flex; align-items: center; gap: 16px; padding: 14px 18px; border-radius: var(--r-md); background: var(--panel); border: 1px solid var(--line); color: var(--text); text-decoration: none; }
+.caserow:hover { border-color: var(--evidence); color: var(--text); }
+.caserow.final { border-style: dashed; }
+.cname { display: block; font: 750 1.15rem var(--display); }
+.cfocus { display: block; color: var(--muted); font-size: .92rem; }
+.ringph { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; border: 2px dashed var(--line); font: 800 1.1rem var(--display); color: var(--muted); flex: none; }
+.ring { flex: none; }
+.ring path { fill: none; stroke: var(--line); stroke-width: 5; stroke-linecap: round; transition: stroke .3s; }
+.ring path.on { stroke: var(--sound); }
+.ring text { fill: var(--text); font: 800 15px var(--display); }
+.distinct { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.dk { padding: 16px 18px; border-radius: var(--r-md); background: var(--panel); border-top: 4px solid var(--line); }
+.dk-appeal { border-top-color: var(--evidence); } .dk-fallacy, .dk-misleading { border-top-color: var(--flaw); } .dk-ethical { border-top-color: var(--sound); }
+.dk p { margin-bottom: .5em; } .dq { color: var(--muted); font-style: italic; }
+.cycle { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; padding: 0; list-style: none; counter-reset: c; }
+.cycle li { counter-increment: c; padding: 14px 16px; background: var(--panel); border-radius: var(--r-md); }
+.cycle li::before { content: counter(c); display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--panel2); font: 800 .9rem var(--display); margin-bottom: 6px; }
+.cycle b { display: block; } .cycle span { color: var(--muted); font-size: .92rem; }
+
+/* Case */
+.casehead { padding-top: 26px; }
+.crumb { color: var(--muted); font-size: .92rem; }
+.ctitle { display: flex; gap: 16px; align-items: center; }
+.ctitle h1 { margin: 0; } .ctitle .sub { color: var(--muted); margin: 4px 0 0; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 22px 0 0; border-bottom: 1px solid var(--line); }
+.steps button { display: flex; align-items: center; gap: 8px; border: 0; background: none; color: var(--muted); font: 700 1rem var(--body); padding: 10px 14px; border-bottom: 3px solid transparent; cursor: pointer; min-height: 44px; }
+.steps button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--evidence); }
+.steps .sn { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--panel2); font-size: .85rem; }
+.steps .complete .sn { background: var(--sound); color: var(--bg); }
+.panel { padding: 26px 0 30px; }
+.panel > h2 { font-size: 1.4rem; }
+.meta { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; max-width: 80ch; }
+.meta dt { color: var(--muted); font-weight: 700; } .meta dd { margin: 0; }
+.vocab { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 10px 0 22px; }
+.vc { background: var(--panel); border-radius: var(--r-md); padding: 14px 16px; border-left: 4px solid var(--evidence); }
+.vc p { margin: 0 0 .4em; } .vt { font: 750 1.08rem var(--display); } .vx { color: var(--muted); font-style: italic; font-size: .94rem; }
+.example { max-width: 72ch; background: var(--panel); padding: 14px 18px; border-radius: var(--r-md); }
+.stepnav { display: flex; justify-content: space-between; gap: 10px; margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--line); }
+
+/* Player and transcript */
+.player { position: relative; max-width: 860px; margin: 8px 0 18px; }
+.player video { width: 100%; border-radius: var(--r-md); background: #000; display: block; }
+.placeholder { display: flex; gap: 14px; align-items: center; padding: 26px; border-radius: var(--r-md); border: 2px dashed var(--line); background: var(--panel); color: var(--muted); }
+.placeholder p { margin: 0; max-width: 52ch; }
+.transcript { max-width: 860px; background: var(--panel); border-radius: var(--r-md); padding: 16px 18px; margin-bottom: 16px; }
+.transcript ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.transcript li { display: grid; grid-template-columns: 56px 96px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.ts { font: 700 .85rem var(--body); color: var(--evidence); background: var(--panel2); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 2px 6px; cursor: pointer; min-height: 30px; }
+.kind { color: var(--muted); font-size: .85rem; font-weight: 700; }
+.tk-n .tx { font-weight: 700; } .tk-x .tx { color: var(--evidence); } .tk-s .tx, .tk-v .tx { color: var(--muted); }
+.orig { display: block; color: var(--muted); font-size: .86rem; font-weight: 400; }
+
+/* Evidence cards (the memorable element) */
+.cards { list-style: none; padding: 0; display: grid; gap: 14px; max-width: 900px; }
+.card { background: var(--panel); border-radius: var(--r-md); padding: 16px 18px; border: 1px solid var(--line); border-left: 6px solid var(--line); transition: border-color .25s; }
+.card.tagged { border-left-color: var(--evidence); }
+.ch { display: flex; gap: 10px; align-items: baseline; margin-bottom: 10px; }
+.ch .mq { font: 700 1.06rem var(--display); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.chip { border: 2px solid var(--line); background: transparent; color: var(--text); border-radius: 999px; padding: 4px 12px; font: 700 .86rem var(--body); cursor: pointer; min-height: 34px; }
+.chip[aria-pressed="true"].t-appeal { background: var(--evidence); border-color: var(--evidence); color: #1A1306; }
+.chip[aria-pressed="true"].t-flaw { background: var(--flaw); border-color: var(--flaw); color: #22090A; }
+.chip[aria-pressed="true"].t-sound { background: var(--sound); border-color: var(--sound); color: #052019; }
+.chip[aria-pressed="true"]::before { content: "\2713\00a0"; }
+.lbl { display: block; font-weight: 700; margin: 8px 0 4px; }
+textarea, select { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 2px solid var(--line); border-radius: var(--r-sm); padding: 9px 11px; }
+select { width: auto; max-width: 100%; min-height: 40px; }
+textarea:focus, select:focus { border-color: var(--evidence); outline: none; box-shadow: 0 0 0 3px rgba(245, 184, 61, .3); }
+.cmp p { margin: 8px 0 0; } .cmp .ok { color: var(--sound); } .cmp .miss { color: var(--evidence); } .cmp .extra { color: var(--flaw); } .cmp .why { color: var(--text); }
+.card .btn { margin-top: 8px; }
+.own { max-width: 900px; margin-top: 16px; background: var(--panel); border-radius: var(--r-md); padding: 12px 18px; }
+.own summary { cursor: pointer; font-weight: 700; min-height: 32px; }
+.ownlist { padding-left: 20px; } .ownlist li { margin: 6px 0; }
+
+/* Questions */
+.q { border: 1px solid var(--line); border-radius: var(--r-md); padding: 16px 18px 18px; margin: 0 0 18px; max-width: 900px; background: var(--panel); }
+.q legend { font: 700 1.08rem/1.35 var(--display); padding: 0 6px; max-width: 70ch; }
+.opts { display: grid; gap: 8px; margin-top: 6px; }
+.opt { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 2px solid var(--line); border-radius: var(--r-sm); cursor: pointer; background: var(--bg); }
+.opt input { margin-top: 5px; accent-color: var(--evidence); width: 18px; height: 18px; flex: none; }
+.opt.right { border-color: var(--sound); } .opt.wrong { border-color: var(--flaw); }
+.fb p, .grid p, .q > p { margin: 10px 0 0; }
+.ok { color: var(--sound); } .no { color: var(--flaw); } .fb .ok, .fb .no { color: var(--text); padding: 10px 12px; border-radius: var(--r-sm); border-left: 4px solid; }
+.fb .ok { border-color: var(--sound); background: rgba(82, 214, 188, .08); } .fb .no { border-color: var(--flaw); background: rgba(255, 130, 112, .08); }
+.hintp { color: var(--evidence); }
+.grid { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 12px; }
+.grid li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, 260px); gap: 6px 14px; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.grid li > p { grid-column: 1 / -1; }
+.inspect { list-style: none; padding: 0; display: grid; gap: 16px; }
+.claim { font: 700 1.05rem var(--display); color: var(--evidence); margin: 0; }
+.reveal { margin-top: 10px; padding: 12px 14px; border-radius: var(--r-sm); background: var(--bg); border-left: 4px solid var(--sound); }
+.reveal h4 { font-size: 1rem; } .reveal ul { margin: 0; padding-left: 20px; }
+.checks { display: grid; gap: 6px; margin: 10px 0; border: 0; padding: 0; }
+.checks legend { font-weight: 700; margin-bottom: 4px; padding: 0; }
+.checks input { width: 18px; height: 18px; accent-color: var(--sound); vertical-align: -3px; margin-right: 6px; }
+.frame { color: var(--muted); } .linkbtn.frame { display: block; color: var(--evidence); margin-bottom: 4px; }
+.write { max-width: 900px; margin-bottom: 18px; }
+.count { color: var(--muted); font-size: .85rem; margin: 4px 0 0; }
+.colbox { max-width: 900px; border: 2px solid var(--evidence); border-radius: var(--r-md); padding: 4px 18px 4px; margin: 10px 0 18px; }
+.colbox h3 { margin-top: 12px; color: var(--evidence); }
+.xfer { max-width: 900px; }
+.done { color: var(--sound); font: 750 1.2rem var(--display); }
+
+/* Notebook, report, teacher */
+.nbcase { margin: 26px 0; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.nbcase h2 { display: flex; gap: 12px; align-items: center; font-size: 1.3rem; }
+.nbcards { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.ecard { background: var(--panel); border-radius: var(--r-md); padding: 12px 14px; border-top: 4px solid var(--evidence); }
+.ecard.own { border-top-color: var(--sound); }
+.ecard .mq, .ecard q { display: block; font: 700 1rem var(--display); margin: 6px 0; } .ecard p { margin: 4px 0 0; }
+.etag { display: inline-block; font-size: .8rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; margin: 0 4px 4px 0; }
+.etag.t-appeal { background: var(--evidence); color: #1A1306; } .etag.t-flaw { background: var(--flaw); color: #22090A; } .etag.t-sound { background: var(--sound); color: #052019; }
+.nbw { max-width: 80ch; }
+.emptyst { background: var(--panel); padding: 18px; border-radius: var(--r-md); }
+.exportbox { margin: 30px 0; padding: 18px 20px; background: var(--panel); border-radius: var(--r-md); max-width: 900px; }
+.filebtn { position: relative; }
+.seg.big { display: flex; flex-wrap: wrap; gap: 10px; border: 0; padding: 0; margin: 0 0 18px; }
+.seg.big legend { font-weight: 700; margin-bottom: 8px; width: 100%; }
+.seg.big label { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 2px solid var(--line); border-radius: 999px; cursor: pointer; }
+.seg.big input { accent-color: var(--evidence); width: 18px; height: 18px; }
+.storyboard { max-width: 900px; background: var(--panel); border-radius: var(--r-md); padding: 16px 20px; margin-bottom: 20px; }
+.storyboard ol { list-style: none; padding: 0; display: grid; gap: 8px; }
+.storyboard li { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; }
+.progressline { font-weight: 700; color: var(--sound); }
+.rubric { max-width: 1000px; margin-top: 20px; } .rubric summary { cursor: pointer; font-weight: 700; min-height: 36px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: .94rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px; border-bottom: 1px solid var(--line); }
+thead th { color: var(--muted); }
+.taglegend { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.teacher h2 { margin-top: 1.4em; } .plain { padding-left: 22px; max-width: 80ch; } .plain li { margin: 6px 0; }
+code { background: var(--panel2); padding: 1px 6px; border-radius: 4px; font-size: .9em; }
+.foot { margin-top: 50px; border-top: 1px solid var(--line); padding: 24px 0 40px; color: var(--muted); font-size: .92rem; }
+.foot p { max-width: 80ch; }
+
+@media (max-width: 900px) {
+  .herogrid { grid-template-columns: 1fr; }
+  .transcript li { grid-template-columns: 52px minmax(0, 1fr); } .transcript .kind { grid-column: 2; }
+  .grid li { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .note { position: static; display: block; max-width: none; margin: 8px; opacity: 1; transform: none; }
+  .frame { aspect-ratio: auto; min-height: 380px; }
+  .switches { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+  .note { opacity: 1; transform: none; }
+}
+
+</style>
+</head>
+<body>
+<div id="app"><p style="padding:2rem">Ad Detective needs JavaScript to run.</p></div>
+<script>
+/* Ad Detective: The Art of Persuasion — all course content.
+   Edit this file to change text. Pairs are [English, Español].
+   Every brand, person, product, and statistic in the ads is invented for instruction.
+   Answer keys are NOT kept here beyond the feedback students see; the full instructor analysis lives in the teacher's private planning document. */
+window.AD = (function () {
+  const D = {};
+
+  /* ---------- Video manifest: add the exported MP4s and captions at these paths. Missing files show a placeholder. ---------- */
+  D.MEDIA_DIR = "assets/videos/";
+  D.CAPTION_DIR = "assets/captions/";
+
+  /* ---------- Technique tags students apply to evidence ---------- */
+  D.TAGS = [
+    { id: "pathos", n: ["Pathos (emotion)", "Pathos (emoción)"], tone: "appeal" },
+    { id: "ethos", n: ["Ethos (credibility)", "Ethos (credibilidad)"], tone: "appeal" },
+    { id: "logos", n: ["Logos (logic, numbers)", "Logos (lógica, números)"], tone: "appeal" },
+    { id: "bandwagon", n: ["Bandwagon", "Efecto de arrastre (bandwagon)"], tone: "flaw" },
+    { id: "dilemma", n: ["False dilemma", "Falso dilema"], tone: "flaw" },
+    { id: "authority", n: ["Questionable authority", "Autoridad cuestionable"], tone: "flaw" },
+    { id: "stats", n: ["Statistics problem", "Problema estadístico"], tone: "flaw" },
+    { id: "misleading", n: ["Misleading claim or implication", "Afirmación o implicación engañosa"], tone: "flaw" },
+    { id: "fear", n: ["Fear appeal", "Apelación al miedo"], tone: "appeal" },
+    { id: "honest", n: ["Honest, checkable claim", "Afirmación honesta y verificable"], tone: "sound" }
+  ];
+
+  /* ---------- Vocabulary (plain definition, example, optional academic note) ---------- */
+  D.VOCAB = [
+    { id: "appeal", t: ["Persuasive appeal", "Apelación persuasiva"], d: ["A strategy used to influence an audience.", "Una estrategia para influir en un público."], ex: ["Showing a comeback story to make you feel inspired.", "Mostrar una historia de superación para que te sientas inspirado."] },
+    { id: "pathos", t: ["Pathos", "Pathos"], d: ["Persuasion through emotion: hope, fear, pride, belonging.", "Persuasión por medio de la emoción: esperanza, miedo, orgullo, pertenencia."], ex: ["Music swells as the runner wins.", "La música crece cuando la corredora gana."] },
+    { id: "ethos", t: ["Ethos", "Ethos"], d: ["Persuasion through the speaker's credibility or character.", "Persuasión por medio de la credibilidad o el carácter del orador."], ex: ["A spokesperson in a lab coat.", "Un vocero con bata de laboratorio."] },
+    { id: "logos", t: ["Logos", "Logos"], d: ["Persuasion through logic, facts, and numbers.", "Persuasión por medio de la lógica, los hechos y los números."], ex: ["\"Nine out of ten students…\"", "\"Nueve de cada diez estudiantes…\""] },
+    { id: "fallacy", t: ["Logical fallacy", "Falacia lógica"], d: ["An error in reasoning that makes an argument weaker than it looks.", "Un error de razonamiento que hace un argumento más débil de lo que parece."], ex: ["\"Either you upgrade, or you fall behind.\"", "\"O te actualizas, o te quedas atrás.\""] },
+    { id: "misleading", t: ["Misleading claim", "Afirmación engañosa"], d: ["A statement that may be technically true but leaves a false impression.", "Una afirmación que puede ser técnicamente cierta pero deja una impresión falsa."], ex: ["\"Up to three times faster\" (in one best case).", "\"Hasta tres veces más rápido\" (en un solo caso)."] },
+    { id: "ethical", t: ["Ethical persuasion", "Persuasión ética"], d: ["Persuasion that respects the audience and supports its claims honestly.", "Persuasión que respeta al público y apoya sus afirmaciones con honestidad."], ex: ["Naming a real feature you can check, like how long a bottle keeps drinks cold.", "Mencionar una característica real que se puede comprobar, como cuánto tiempo mantiene fría una bebida."] },
+    { id: "bandwagon", t: ["Bandwagon", "Efecto de arrastre"], d: ["Claiming something is good or right because many people do it.", "Decir que algo es bueno o correcto porque mucha gente lo hace."], ex: ["\"Everybody's switching.\"", "\"Todos se están cambiando.\""] },
+    { id: "dilemma", t: ["False dilemma", "Falso dilema"], d: ["Presenting only two choices when more exist.", "Presentar solo dos opciones cuando existen más."], ex: ["\"Upgrade or fall behind.\"", "\"Actualízate o quédate atrás.\""] },
+    { id: "authority", t: ["Questionable appeal to authority", "Apelación cuestionable a la autoridad"], d: ["Using someone's title or fame in place of evidence, especially when their expertise doesn't match the claim.", "Usar el título o la fama de alguien en lugar de evidencia, sobre todo cuando su experiencia no corresponde a la afirmación."], ex: ["A business PhD endorsing a focus product.", "Un doctorado en negocios que respalda un producto para la concentración."] },
+    { id: "correlation", t: ["Correlation vs. causation", "Correlación vs. causalidad"], d: ["Two things happening together doesn't prove one causes the other.", "Que dos cosas ocurran juntas no prueba que una cause la otra."], ex: ["App users get better grades, but motivated students may choose study apps.", "Quienes usan la app sacan mejores notas, pero los estudiantes motivados quizá eligen apps de estudio."] },
+    { id: "credibility", t: ["Credibility", "Credibilidad"], d: ["How much a source deserves to be trusted, based on expertise, independence, and evidence.", "Cuánto merece una fuente que se le crea, según su experiencia, independencia y evidencia."], ex: ["An independent lab test is more credible than a company's own survey.", "Una prueba de un laboratorio independiente es más creíble que la encuesta de la propia empresa."] },
+    { id: "fear", t: ["Fear appeal", "Apelación al miedo"], d: ["Persuasion that works by making the audience worried about a threat.", "Persuasión que funciona haciendo que el público se preocupe por una amenaza."], ex: ["\"Dehydration could be silently ruining your day.\"", "\"La deshidratación podría estar arruinando tu día en silencio.\""] }
+  ];
+
+  /* ---------- The four distinctions ---------- */
+  D.DISTINCT = [
+    { k: "appeal", n: ["Persuasive appeal", "Apelación persuasiva"], d: ["A strategy used to influence an audience.", "Una estrategia para influir en un público."], q: ["What is this trying to make me trust, feel, or believe?", "¿Qué intenta hacerme confiar, sentir o creer?"] },
+    { k: "fallacy", n: ["Logical fallacy", "Falacia lógica"], d: ["An error in reasoning that weakens an argument.", "Un error de razonamiento que debilita un argumento."], q: ["Does the conclusion actually follow from the reason?", "¿La conclusión realmente se deriva de la razón?"] },
+    { k: "misleading", n: ["Misleading claim", "Afirmación engañosa"], d: ["May be technically true but creates a false impression.", "Puede ser técnicamente cierta pero crea una impresión falsa."], q: ["What would I believe after this, and is that accurate?", "¿Qué creería después de esto, y es exacto?"] },
+    { k: "ethical", n: ["Ethical persuasion", "Persuasión ética"], d: ["Respects the audience and supports its claims.", "Respeta al público y apoya sus afirmaciones."], q: ["Would this still work if the audience knew everything?", "¿Funcionaría si el público lo supiera todo?"] }
+  ];
+
+  const L = (en, es) => [en, es];
+  /* transcript row: [seconds, kind, en, es]; kind: v = what you see, n = narration, x = on-screen text, s = sound */
+  D.CASES = [
+    {
+      id: 1, slug: "emotional-hook", file: "emotional-hook", dur: 35,
+      title: L("The Emotional Hook", "El gancho emocional"), ad: L("\u201cRise Again\u201d for Vimbright Rise hydration drink", "\u201cLevántate otra vez\u201d de la bebida hidratante Vimbright Rise"),
+      focus: L("Pathos and emotional appeals", "Pathos y apelaciones emocionales"),
+      target: L("I can explain how music, imagery, and story create an emotional appeal, and judge whether that appeal is supported or fair.", "Puedo explicar cómo la música, las imágenes y la historia crean una apelación emocional, y juzgar si esa apelación está respaldada o es justa."),
+      mission: L("A sports drink ad that barely talks about the drink. Find out how it persuades anyway.", "Un anuncio de una bebida deportiva que casi no habla de la bebida. Descubre cómo persuade de todos modos."),
+      vocab: ["pathos", "misleading", "ethical"],
+      example: "In a car ad, a family laughs on a road trip while soft guitar plays. Nothing is said about safety ratings. The appeal is pathos: the ad links the car with family happiness, not with evidence about the car.",
+      transcript: [
+        [0, "s", "[Solo piano, slow and sparse. Distant wind.]", "[Piano solo, lento y suave. Viento a lo lejos.]"],
+        [0, "v", "Pre-dawn. A young Black woman runner laces her shoes on an empty track under floodlights.", "Antes del amanecer. Una joven corredora negra se ata los tenis en una pista vacía bajo los reflectores."],
+        [1, "n", "Nobody sees the five a.m. alarms.", "Nadie ve las alarmas de las cinco de la mañana."],
+        [5, "v", "She runs stadium stairs in heavy rain.", "Sube corriendo las gradas del estadio bajo una lluvia fuerte."],
+        [6, "n", "Nobody sees the rain. The doubt. The voice that says quit.", "Nadie ve la lluvia. La duda. La voz que dice: ríndete."],
+        [10, "v", "Race day, final lap. She clips another runner's heel and falls in slow motion.", "Día de la carrera, última vuelta. Choca con el talón de otra corredora y cae en cámara lenta."],
+        [10, "s", "[Music stops. A single heartbeat, then another.]", "[La música se detiene. Un latido, y luego otro.]"],
+        [13, "n", "They only see what you do next.", "Solo ven lo que haces después."],
+        [15, "v", "Her hand closes around a bottle of Vimbright Rise. Warm light catches it. She drinks.", "Su mano toma una botella de Vimbright Rise. Una luz cálida la ilumina. Ella bebe."],
+        [16, "n", "Vimbright Rise. Fuel for the comeback.", "Vimbright Rise. Energía para el regreso."],
+        [20, "v", "She sprints, passes two runners, and crosses the finish line. Teammates rush to hug her.", "Corre a toda velocidad, rebasa a dos corredoras y cruza la meta. Sus compañeras corren a abrazarla."],
+        [20, "s", "[Full orchestra and drums swell. The crowd roars.]", "[Crece la orquesta con tambores. El público ruge.]"],
+        [22, "n", "Rise again.", "Levántate otra vez."],
+        [28, "x", "VIMBRIGHT RISE. Built for Champions.", "VIMBRIGHT RISE. Hecha para campeones."],
+        [28, "x", "Small text: Hydration drink. Not a substitute for training.", "Letra pequeña: Bebida hidratante. No sustituye el entrenamiento."],
+        [32, "x", "This is a fictional advertisement created for classroom instruction. Vimbright is not a real company.", "Este es un anuncio ficticio creado para la clase. Vimbright no es una empresa real."]
+      ],
+      moments: [
+        { t: 10, q: "The fall: music cuts to silence, then a heartbeat", tags: ["pathos"], why: "Silence and a heartbeat make viewers hold their breath, so the relief that follows feels bigger." },
+        { t: 15, q: "The drink appears at the turning point: \u201cFuel for the comeback\u201d", tags: ["pathos", "misleading"], why: "Placing the product right before the comeback invites viewers to credit the drink for the win, without the ad ever saying so." },
+        { t: 20, q: "The swell and the victory", tags: ["pathos"], why: "Triumphant music attaches pride and relief to the moment right after the product shot." },
+        { t: 28, q: "\u201cBuilt for Champions\u201d", tags: ["pathos"], why: "A slogan about identity: buying it makes you feel like a champion. It isn't a claim anyone could test." },
+        { t: 28, q: "Fine print: \u201cNot a substitute for training\u201d", tags: ["honest"], why: "An honest, checkable disclaimer, though it's on screen for only a moment." }
+      ],
+      analyze: [
+        { type: "mc", q: "What is the ad's primary appeal?", hint: "Think about what the ad makes you feel, and what it tells you about the drink itself.", o: [
+          ["Logos: it explains how the drink improves performance", "Look again: the ad never gives a fact about the drink's ingredients or effects."],
+          ["Pathos: a comeback story links the drink with perseverance and triumph", "Yes. The persuasion lives in the story, the music, and the timing, not in information about the drink.", 1],
+          ["Ethos: a famous athlete vouches for the drink", "No athlete endorses it. The runner is a character in a story, not a spokesperson."]] },
+        { type: "mc", q: "Why does the music cut to silence when she falls?", hint: "Imagine the same fall with upbeat music playing. What would you feel differently?", o: [
+          ["To save money on music licensing", "Production cost isn't the reason; the silence is a deliberate creative choice."],
+          ["To build tension so the swell after the product shot feels like relief", "Yes. Silence makes viewers hold their breath; the music returns right after the drink appears, so the relief gets linked to the product.", 1],
+          ["To show that the race is over", "The race isn't over; she gets up and wins. The silence is about emotion, not plot."]] },
+        { type: "mc", q: "Sound swap: if the fall played over cheerful pop music, what would most likely change?", hint: "Music tells viewers how to interpret what they see.", o: [
+          ["Nothing, because music doesn't affect meaning", "Music strongly shapes how we interpret images; that's why ads score them so carefully."],
+          ["The fall would feel less serious, so the comeback would feel less powerful", "Yes. The emotional meaning comes partly from the score. Same images, different feeling.", 1],
+          ["The drink would seem healthier", "The music would change the mood of the story, not any claim about health."]] },
+        { type: "sort", q: "Sort each element of the ad.", hint: "Ask: does this make me feel something, or does it tell me something I could check?", cats: [["emotion", "Emotional appeal"], ["fact", "Information you could check"]], items: [
+          ["\u201cFuel for the comeback\u201d", "emotion", "A slogan. It sounds meaningful, but there's nothing to check."],
+          ["The slow-motion fall with a heartbeat", "emotion", "Sound and slow motion create suspense."],
+          ["\u201cHydration drink. Not a substitute for training.\u201d", "fact", "This is a factual statement about what the product is and isn't."],
+          ["\u201cBuilt for Champions\u201d", "emotion", "An identity slogan, not a testable claim."],
+          ["Teammates rushing to hug her", "emotion", "Belonging and pride."]] },
+        { type: "mc", q: "Does the ad commit a logical fallacy?", hint: "A fallacy is an error in a stated argument. Does the ad actually state that the drink caused the win?", o: [
+          ["Yes: it states that the drink caused her win", "The ad never states that. Listen again to the narration."],
+          ["Not exactly: it implies the drink helped by placing it at the turning point, which is a misleading implication rather than a stated argument", "Yes. The persuasion works through suggestion. If you argued \u201cit implies false cause,\u201d that's a strong answer when you explain that it's implied, not stated.", 1],
+          ["No: the ad contains no persuasion at all", "Every element of the ad is persuasive; it just isn't making a stated argument."]] }
+      ],
+      evaluate: { q: "Is this emotional appeal ethically appropriate? Inspiring stories are legitimate, so weigh that against what the ad implies.", frame: "Although the ad is ___, it ___ because ___.", check: ["I named a specific moment from the ad.", "I said what the ad does well or fairly.", "I said what could mislead viewers, if anything.", "I made a clear judgment and gave a reason."] },
+      college: { q: "Who is the target audience, and how does the ad define what a \u201cchampion\u201d is? Is aspirational storytelling aimed at young athletes fair?", frame: "The ad targets ___, as shown by ___. It defines a champion as ___, which ___." },
+      transfer: "Think of an ad you've seen recently that sells a feeling more than a product. Describe it in two sentences and name the emotion it uses."
+    },
+    {
+      id: 2, slug: "expert-endorsement", file: "expert-endorsement", dur: 35,
+      title: L("Trust Me, I'm an Expert", "Confía en mí, soy experto"), ad: L("\u201cAsk the Expert\u201d for Brainmoor Focus Pro headphones", "\u201cPregúntale al experto\u201d de los audífonos Brainmoor Focus Pro"),
+      focus: L("Ethos, credibility, and questionable authority", "Ethos, credibilidad y autoridad cuestionable"),
+      target: L("I can evaluate whether a spokesperson's expertise is relevant and independent, and explain when an appeal to expertise becomes questionable.", "Puedo evaluar si la experiencia de un vocero es pertinente e independiente, y explicar cuándo una apelación a la experiencia se vuelve cuestionable."),
+      mission: L("A doctor in a lab coat recommends headphones. Check his credentials before you trust him.", "Un doctor con bata de laboratorio recomienda unos audífonos. Revisa sus credenciales antes de confiar en él."),
+      vocab: ["ethos", "authority", "credibility"],
+      example: "A toothpaste ad features a dentist who explains a study published by an independent university. That's a relevant expert with checkable evidence, a legitimate appeal to expertise. If the same ad used a famous chef instead, the expertise wouldn't match the claim.",
+      transcript: [
+        [0, "v", "A white man in his fifties in a white lab coat stands in a sleek lab. Screens behind him show brain scans.", "Un hombre blanco de unos cincuenta años, con bata blanca, está en un laboratorio moderno. Detrás de él, unas pantallas muestran escáneres cerebrales."],
+        [0, "x", "Dr. Marcus Vey, PhD \u2022 Focus Expert", "Dr. Marcus Vey, doctorado \u2022 Experto en concentración"],
+        [1, "n", "I'm Dr. Marcus Vey. I've spent fifteen years studying what helps people perform at their best.", "Soy el Dr. Marcus Vey. He pasado quince años estudiando lo que ayuda a las personas a rendir al máximo."],
+        [6, "v", "A young South Asian woman student sits in a noisy café, overwhelmed, her phone buzzing.", "Una joven estudiante del sur de Asia está en un café ruidoso, abrumada, con su teléfono vibrando."],
+        [7, "n", "Distraction is everywhere. That's why I recommend Brainmoor Focus Pro.", "Las distracciones están en todas partes. Por eso recomiendo Brainmoor Focus Pro."],
+        [12, "v", "She puts on the headphones. The café noise fades away and she smiles.", "Se pone los audífonos. El ruido del café desaparece y ella sonríe."],
+        [12, "x", "NeuroCalm\u2122 Technology \u2022 Patented", "Tecnología NeuroCalm\u2122 \u2022 Patentada"],
+        [13, "n", "Its patented NeuroCalm sound technology filters out the noise, so your brain can do what it does best.", "Su tecnología de sonido patentada NeuroCalm filtra el ruido para que tu cerebro haga lo que mejor sabe hacer."],
+        [20, "x", "9 out of 10 students felt more focused*", "9 de cada 10 estudiantes se sintieron más concentrados*"],
+        [21, "n", "In our testing, nine out of ten students said they felt more focused.", "En nuestras pruebas, nueve de cada diez estudiantes dijeron que se sintieron más concentrados."],
+        [27, "n", "Trust the science. Trust Brainmoor.", "Confía en la ciencia. Confía en Brainmoor."],
+        [31, "x", "*Dr. Vey holds a PhD in business administration and is a paid Brainmoor spokesperson. Testing conducted by Brainmoor with 10 participants.", "*El Dr. Vey tiene un doctorado en administración de empresas y es un vocero pagado por Brainmoor. Pruebas realizadas por Brainmoor con 10 participantes."],
+        [33, "x", "This is a fictional advertisement created for classroom instruction. Brainmoor is not a real company.", "Este es un anuncio ficticio creado para la clase. Brainmoor no es una empresa real."]
+      ],
+      moments: [
+        { t: 0, q: "Lab coat, brain scans, and the title \u201cFocus Expert\u201d", tags: ["ethos", "authority"], why: "Costume and set signal science. The title was created for the ad; it isn't a recognized credential." },
+        { t: 13, q: "\u201cPatented NeuroCalm sound technology\u201d", tags: ["logos", "misleading"], why: "A patent shows an idea is new, not that it works. The phrase sounds scientific without proving anything." },
+        { t: 21, q: "\u201cNine out of ten students said they felt more focused\u201d", tags: ["logos", "stats"], why: "Ten people, in the company's own test, reporting a feeling." },
+        { t: 27, q: "\u201cTrust the science. Trust Brainmoor.\u201d", tags: ["ethos", "authority"], why: "Asks for trust in place of showing any science." },
+        { t: 31, q: "The fine print about his PhD and paid role", tags: ["honest"], why: "An honest disclosure, but it's tiny and brief, and it undercuts everything the ad implied." }
+      ],
+      analyze: [
+        { type: "judge", q: "Credential check: is each credential relevant to the claim \u201cthese headphones improve focus\u201d?", hint: "Ask whether the expertise matches the claim, and whether the evidence is independent.", opts: [["yes", "Relevant"], ["partly", "Partly"], ["no", "Not relevant"]], items: [
+          ["\u201cDr.\u201d and \u201cPhD\u201d (the fine print says business administration)", "no", "A business PhD isn't training in neuroscience, psychology, or hearing."],
+          ["The title \u201cFocus Expert\u201d", "no", "Brainmoor made up the title for the ad; it isn't a recognized credential."],
+          ["\u201cFifteen years studying what helps people perform\u201d", "partly", "Workplace productivity experience is related, but it isn't research on headphones or attention."],
+          ["The lab coat and brain-scan screens", "no", "Costume and set design are visual signals of science, not evidence."],
+          ["\u201cPatented\u201d", "no", "A patent shows an idea is new, not that it works."],
+          ["\u201cIn our testing\u201d (Brainmoor, 10 participants)", "partly", "It is evidence, but weak: tiny, run by the company, and measuring feelings rather than focus."]] },
+        { type: "mc", q: "When does an appeal to expertise become a questionable appeal to authority?", hint: "Experts are often worth listening to. What makes this case different?", o: [
+          ["Whenever an ad uses an expert", "Not every expert endorsement is fallacious. Relevant, independent experts with evidence are legitimate."],
+          ["When the expertise doesn't match the claim, or the endorsement replaces evidence", "Yes. The question is relevance and evidence, not whether someone has a title.", 1],
+          ["When the expert is paid", "Being paid creates a conflict of interest worth noting, but a paid expert can still be relevant and honest. Payment alone isn't the test."]] },
+        { type: "mc", q: "Which endorsement would be a legitimate appeal to expertise for noise-cancelling headphones?", hint: "Look for relevant expertise plus evidence someone outside the company could check.", o: [
+          ["A famous basketball player who wears them", "Fame isn't expertise in hearing or sound."],
+          ["An independent audiologist explaining a published outside lab test of how much noise they block", "Yes. The expert's field matches the claim, and the evidence is independent and checkable.", 1],
+          ["The company's own scientist, in a lab coat, saying they're the best", "Relevant field, maybe, but no evidence and a conflict of interest."]] },
+        { type: "mc", q: "What is the weakest part of \u201cnine out of ten students felt more focused\u201d?", hint: "Read the fine print. Who ran the test, how many people, and what did they measure?", o: [
+          ["Nine out of ten is a high number", "A high number isn't the problem; the problem is what's behind it."],
+          ["The test was run by the company, with ten people, measuring how they felt", "Yes. Small, not independent, and self-reported. You'll investigate numbers like this in Case 5.", 1],
+          ["Students were the participants", "Students are the right audience to test. The method is the weak part."]] }
+      ],
+      evaluate: { q: "Is it ethical to put a business PhD in a lab coat to sell a focus product? Consider what the fine print reveals.", frame: "The ad builds ethos by ___, but ___. A more honest version would ___.", check: ["I explained what creates credibility in the ad.", "I explained whether that credibility is relevant.", "I mentioned the fine print or conflict of interest.", "I made a clear judgment with a reason."] },
+      college: { q: "What would independent evidence for \u201cimproves focus\u201d look like? Who should run the test, with how many people, measuring what?", frame: "To trust this claim, I would need ___, run by ___, measuring ___." },
+      transfer: "Think of an ad that uses a doctor, scientist, celebrity, or influencer. Is their expertise relevant to the product? Explain in two or three sentences."
+    },
+    {
+      id: 3, slug: "bandwagon-sneakers", file: "bandwagon-sneakers", dur: 30,
+      title: L("Everybody's Buying It", "Todos lo están comprando"), ad: L("\u201cDon't Get Left Behind\u201d for Strideborne Drift sneakers", "\u201cNo te quedes atrás\u201d de los tenis Strideborne Drift"),
+      focus: L("Bandwagon, belonging, and fear of missing out", "Efecto de arrastre, pertenencia y miedo a perderse algo"),
+      target: L("I can identify bandwagon pressure, fear of missing out, and identity appeals, and explain when popularity is relevant evidence and when it isn't.", "Puedo identificar la presión de grupo, el miedo a perderse algo y las apelaciones a la identidad, y explicar cuándo la popularidad es evidencia pertinente y cuándo no."),
+      mission: L("A sneaker ad that never says the shoes are good. Find out what it's really selling.", "Un anuncio de tenis que nunca dice que sean buenos. Descubre qué vende en realidad."),
+      vocab: ["bandwagon", "pathos", "misleading"],
+      example: "A phone ad shows hundreds of people lining up and says \u201cthe phone everyone's talking about.\u201d That shows popularity, not quality. If the ad said \u201crated highest for battery life by an independent testing lab,\u201d that would be evidence about the phone itself.",
+      transcript: [
+        [0, "s", "[A hard-hitting beat drops.]", "[Entra un ritmo fuerte.]"],
+        [0, "v", "A diverse crew of young adults, including a wheelchair user, crosses a city basketball court, all in the same white-and-teal sneakers.", "Un grupo diverso de jóvenes, incluido un usuario de silla de ruedas, cruza una cancha de básquetbol, todos con los mismos tenis blanco y verde azulado."],
+        [1, "n", "Look around.", "Mira a tu alrededor."],
+        [4, "v", "A phone feed fills with photos of the same sneakers.", "Una pantalla de teléfono se llena de fotos de los mismos tenis."],
+        [4, "x", "#DriftNation", "#DriftNation"],
+        [5, "n", "Everybody's switching to Strideborne Drift.", "Todos se están cambiando a Strideborne Drift."],
+        [9, "v", "A young Latino man in worn sneakers sits alone on a bench. The image turns gray as a laughing group walks past without noticing him.", "Un joven latino con tenis gastados está solo en una banca. La imagen se vuelve gris mientras un grupo pasa riéndose sin notarlo."],
+        [9, "s", "[The beat sounds muffled, as if underwater.]", "[El ritmo suena apagado, como bajo el agua.]"],
+        [10, "n", "Still wearing last year's look?", "¿Todavía con el estilo del año pasado?"],
+        [15, "x", "1,000,000+ pairs sold*", "Más de 1,000,000 de pares vendidos*"],
+        [15, "n", "Over one million pairs sold.", "Más de un millón de pares vendidos."],
+        [19, "v", "He puts on the sneakers. Color floods back. The group waves him over and someone fist-bumps him.", "Se pone los tenis. El color regresa. El grupo lo llama y alguien choca el puño con él."],
+        [19, "s", "[Bass drop. A crowd cheers.]", "[Cae el bajo. Un público aplaude.]"],
+        [20, "n", "Don't get left behind.", "No te quedes atrás."],
+        [24, "n", "Strideborne Drift. Find your crew.", "Strideborne Drift. Encuentra a tu grupo."],
+        [24, "x", "STRIDEBORNE DRIFT. Find Your Crew. Small text: *Worldwide since launch.", "STRIDEBORNE DRIFT. Encuentra a tu grupo. Letra pequeña: *En todo el mundo desde su lanzamiento."],
+        [28, "x", "This is a fictional advertisement created for classroom instruction. Strideborne is not a real company.", "Este es un anuncio ficticio creado para la clase. Strideborne no es una empresa real."]
+      ],
+      moments: [
+        { t: 5, q: "\u201cEverybody's switching to Strideborne Drift\u201d", tags: ["bandwagon"], why: "An unsupported popularity claim; the montage makes it feel true." },
+        { t: 9, q: "The lonely, gray bench shot and \u201cStill wearing last year's look?\u201d", tags: ["pathos", "fear"], why: "Exclusion and embarrassment: not owning the shoe is framed as being left out." },
+        { t: 15, q: "\u201cOver one million pairs sold\u201d (worldwide since launch)", tags: ["logos", "misleading"], why: "Even if true, sales show popularity, not quality, and the time span is unknown." },
+        { t: 20, q: "\u201cDon't get left behind\u201d", tags: ["bandwagon", "fear"], why: "Fear of missing out turns buying into a way to avoid being left out." },
+        { t: 24, q: "Color floods back; \u201cFind your crew\u201d", tags: ["pathos"], why: "The ad sells belonging, not a shoe." }
+      ],
+      analyze: [
+        { type: "judge", q: "Popularity test: is popularity relevant evidence in each situation?", hint: "Popularity can prove something is popular. Does it prove the thing being claimed?", opts: [["yes", "Relevant"], ["partly", "Partly"], ["no", "Not relevant"]], items: [
+          ["A restaurant with 2,000 recent reviews averaging 4.7 stars", "partly", "Many independent diners is real evidence about typical experiences, though reviews can be faked or skewed."],
+          ["\u201cEveryone at school is wearing them,\u201d as a reason they're good shoes", "no", "That shows a trend, not comfort or durability."],
+          ["A song with 50 million streams, as proof it's popular", "yes", "Popularity is the claim, so popularity proves it. It doesn't prove you'll like the song."],
+          ["\u201cThe most-downloaded study app,\u201d as proof it helps you learn", "no", "Downloads don't show that anyone learned more."],
+          ["Thousands of verified buyers saying a shoe runs half a size small", "yes", "Many independent reports about a specific, checkable fact are useful evidence."]] },
+        { type: "sort", q: "Sort each line or moment by the strategy it mainly uses.", hint: "Bandwagon is about \u201ceveryone.\u201d FOMO is about being left out. Belonging is about joining a group.", cats: [["bandwagon", "Bandwagon"], ["fomo", "Fear of missing out"], ["belong", "Belonging and identity"]], items: [
+          ["\u201cEverybody's switching to Strideborne Drift.\u201d", "bandwagon", "\u201cEverybody\u201d is the bandwagon signal."],
+          ["\u201cStill wearing last year's look?\u201d", "fomo", "It makes not having the shoe feel embarrassing and outdated."],
+          ["\u201cDon't get left behind.\u201d", "fomo", "A direct warning about being left out. It also works as bandwagon."],
+          ["\u201cFind your crew.\u201d", "belong", "Buying the shoe is framed as joining a group."],
+          ["#DriftNation", "belong", "A hashtag that turns customers into a \u201cnation\u201d you can belong to."]] },
+        { type: "mc", q: "What does the ad never tell you about the sneakers?", hint: "List everything you'd want to know before buying shoes.", o: [
+          ["That they're popular", "That's almost all it tells you."],
+          ["Whether they're comfortable, durable, well made, or worth the price", "Yes. The ad sells belonging and leaves out everything about the shoe itself.", 1],
+          ["What color they are", "The ad shows the color clearly."]] }
+      ],
+      evaluate: { q: "Targeting young people's need to belong is effective. Is it fair? Consider who might be affected.", frame: "This ad is effective because ___. However, it could affect ___ because ___.", check: ["I explained why the appeal works.", "I named who might be affected.", "I avoided saying all fashion advertising is unethical.", "I made a clear judgment with a reason."] },
+      college: { q: "How does the ad define who belongs? Who is absent from the \u201ccrew,\u201d and what does that suggest about the target audience?", frame: "The ad defines belonging as ___. It leaves out ___, which suggests ___." },
+      transfer: "Think of an ad or social-media trend that says \u201ceveryone\u201d has or does something. Is popularity relevant evidence in that case? Why or why not?"
+    },
+    {
+      id: 4, slug: "false-choice", file: "false-choice", dur: 30,
+      title: L("The False Choice", "La falsa elección"), ad: L("\u201cChoose Your Future\u201d for Quillon Slate tablet", "\u201cElige tu futuro\u201d de la tableta Quillon Slate"),
+      focus: L("False dilemma", "Falso dilema"),
+      target: L("I can identify a false dilemma, name the options it hides, rewrite the claim so it's logically defensible, and tell a false dilemma from a genuine two-option situation.", "Puedo identificar un falso dilema, nombrar las opciones que oculta, reescribir la afirmación para que sea lógicamente defendible y distinguir un falso dilema de una situación con dos opciones reales."),
+      mission: L("A tablet ad says there are only two kinds of students. Find the options it's hiding.", "Un anuncio de una tableta dice que solo hay dos tipos de estudiantes. Encuentra las opciones que oculta."),
+      vocab: ["dilemma", "fallacy", "pathos"],
+      example: "\u201cEither you join the debate team, or you'll never be a good speaker.\u201d That's a false dilemma: you could take a speech class, practice at home, or join a different club. Compare: \u201cThe bus leaves at 7:10. Either you're on it, or you'll need another ride.\u201d That one is a genuine two-option situation.",
+      transcript: [
+        [0, "v", "Split screen. Left: a young East Asian woman student buried in papers under a flickering lamp, in gray tones. Right: the same student calmly writing on a sleek tablet in a bright room.", "Pantalla dividida. Izquierda: una joven estudiante del este de Asia rodeada de papeles bajo una lámpara parpadeante, en tonos grises. Derecha: la misma estudiante escribe tranquila en una tableta en un cuarto luminoso."],
+        [0, "s", "[Left side: a tense ticking clock. Right side: an airy synth.]", "[Lado izquierdo: un reloj tenso. Lado derecho: un sintetizador suave.]"],
+        [1, "n", "There are two kinds of students.", "Hay dos tipos de estudiantes."],
+        [4, "v", "Papers slide off the gray desk.", "Los papeles caen del escritorio gris."],
+        [5, "n", "The ones still drowning in paper…", "Los que siguen ahogándose en papel…"],
+        [10, "v", "The bright side fills the screen. She smiles as the tablet glows with an A.", "El lado luminoso llena la pantalla. Ella sonríe mientras la tableta brilla con una A."],
+        [10, "n", "…and the ones who've already chosen the future.", "…y los que ya eligieron el futuro."],
+        [16, "x", "Either you upgrade, or you fall behind.", "O te actualizas, o te quedas atrás."],
+        [16, "n", "Quillon Slate. Either you upgrade, or you fall behind.", "Quillon Slate. O te actualizas, o te quedas atrás."],
+        [22, "v", "The split screen returns, and the gray side fades to black.", "Regresa la pantalla dividida y el lado gris se funde a negro."],
+        [22, "n", "The choice is yours.", "Tú decides."],
+        [22, "x", "QUILLON SLATE. Choose Your Future.", "QUILLON SLATE. Elige tu futuro."],
+        [27, "x", "This is a fictional advertisement created for classroom instruction. Quillon is not a real company.", "Este es un anuncio ficticio creado para la clase. Quillon no es una empresa real."]
+      ],
+      moments: [
+        { t: 1, q: "\u201cThere are two kinds of students\u201d", tags: ["dilemma"], why: "Sets up only two categories when students vary in countless ways." },
+        { t: 4, q: "The split screen: gray chaos vs. bright calm", tags: ["pathos", "dilemma"], why: "The visual makes the false choice feel natural: stress on one side, success on the other." },
+        { t: 10, q: "The glowing A on the tablet", tags: ["misleading"], why: "Implies the tablet produces better grades, with no evidence." },
+        { t: 16, q: "\u201cEither you upgrade, or you fall behind\u201d", tags: ["dilemma", "fear"], why: "The core false dilemma, with a fear of falling behind attached." },
+        { t: 22, q: "\u201cThe choice is yours\u201d as the gray side fades to black", tags: ["dilemma"], why: "It offers \u201cchoice\u201d after erasing every option but one." }
+      ],
+      analyze: [
+        { type: "option", q: "Option finder: list at least three options the ad hides. Then compare with the investigator's list.", hint: "Think about other devices, other study methods, and what actually helps students succeed.", reveal: ["Other tablets, laptops, or the school-issued device", "Paper notebooks and planners that work fine for many students", "Free apps on a device you already have", "Study habits, sleep, and support from teachers, which matter more than any device", "Keeping your current device: not upgrading doesn't mean falling behind"] },
+        { type: "judge", q: "Genuine or false? Two of these are genuine two-option situations.", hint: "A genuine two-option situation has a rule or fact that truly allows only two outcomes.", opts: [["false", "False dilemma"], ["genuine", "Genuine two options"]], items: [
+          ["\u201cEither you upgrade to Quillon Slate, or you fall behind.\u201d", "false", "Many other paths exist."],
+          ["\u201cThe early-registration deadline is Friday at 5 p.m. Either you register by then, or you pay the regular price.\u201d", "genuine", "The rule truly creates only two outcomes."],
+          ["\u201cEither you support the new schedule, or you don't care about students.\u201d", "false", "People can care about students and still disagree about the schedule."],
+          ["\u201cThe file either finished uploading or it didn't.\u201d", "genuine", "A completed upload is a yes-or-no fact."],
+          ["\u201cYou're either a math person or you're not.\u201d", "false", "Skills develop with practice; most people are somewhere in between."]] },
+        { type: "rewrite", q: "Rewrite \u201cEither you upgrade, or you fall behind\u201d so it's logically defensible but still persuasive.", frame: "If you ___, Quillon Slate can help you ___.", model: "\u201cIf you take lots of handwritten notes and want them organized and searchable, Quillon Slate is one option worth comparing.\u201d", check: ["My rewrite names a specific benefit.", "It names who it's for.", "It leaves room for other choices.", "It's still persuasive."] }
+      ],
+      evaluate: { q: "Is it fair for an ad aimed at students to frame not buying as \u201cfalling behind\u201d? Explain.", frame: "This framing is ___ because ___. Students might ___.", check: ["I explained how the false dilemma works.", "I considered the effect on students.", "I made a clear judgment with a reason."] },
+      college: { q: "Compare this ad with Case 3. Both frame not buying as a loss. How does a false choice combine with bandwagon pressure, and which is more persuasive for teens?", frame: "Both ads ___. However, Case 3 relies on ___, while Case 4 relies on ___." },
+      transfer: "Think of an ad, announcement, or argument that offered only two options. Were there really only two? Name one option it left out."
+    },
+    {
+      id: 5, slug: "misleading-statistics", file: "misleading-statistics", dur: 40,
+      title: L("Numbers Don't Lie\u2014or Do They?", "Los números no mienten\u2026 ¿o sí?"), ad: L("\u201cThe Numbers Speak\u201d for Cramlytic study app", "\u201cLos números hablan\u201d de la app de estudio Cramlytic"),
+      focus: L("Logos, statistics, and misleading claims", "Logos, estadísticas y afirmaciones engañosas"),
+      target: L("I can identify statistics that lack context, sources, or fair comparisons, explain correlation vs. causation, and name the evidence I'd need to evaluate a numerical claim.", "Puedo identificar estadísticas sin contexto, sin fuentes o sin comparaciones justas, explicar la diferencia entre correlación y causalidad, y nombrar la evidencia que necesitaría para evaluar una afirmación numérica."),
+      mission: L("Every number in this ad sounds convincing. Inspect what's behind each one. (All statistics are invented for instruction.)", "Cada número en este anuncio suena convincente. Inspecciona lo que hay detrás de cada uno. (Todas las estadísticas son inventadas para la clase.)"),
+      vocab: ["logos", "correlation", "misleading"],
+      example: "\u201cOur juice has 50% less sugar!\u201d Less than what? If the comparison is to a soda, the juice could still be very sugary. Good investigators ask: compared to what, measured how, and according to whom?",
+      transcript: [
+        [0, "v", "Glowing data points swirl into a sphere of light on a dark navy background.", "Puntos de datos brillantes giran hasta formar una esfera de luz sobre un fondo azul marino."],
+        [0, "n", "Some apps make promises. Cramlytic shows you the numbers.", "Algunas apps hacen promesas. Cramlytic te muestra los números."],
+        [5, "v", "A bar chart: a short gray bar and a towering teal bar. The vertical axis starts at 45, not zero.", "Una gráfica de barras: una barra gris corta y una barra verde azulado altísima. El eje vertical empieza en 45, no en cero."],
+        [5, "x", "+40% higher scores", "+40 % mejores calificaciones"],
+        [6, "n", "Cramlytic users score forty percent higher on tests.", "Los usuarios de Cramlytic sacan un cuarenta por ciento más en los exámenes."],
+        [11, "x", "2,000,000+ downloads", "Más de 2,000,000 de descargas"],
+        [11, "n", "Over two million downloads.", "Más de dos millones de descargas."],
+        [16, "v", "Ten silhouettes; nine light up.", "Diez siluetas; nueve se iluminan."],
+        [16, "n", "Nine out of ten students recommend Cramlytic.", "Nueve de cada diez estudiantes recomiendan Cramlytic."],
+        [22, "v", "A young Latina student smiles and holds up a report card full of A's.", "Una joven estudiante latina sonríe y muestra una boleta llena de A."],
+        [22, "x", "20 min/day = better grades", "20 min al día = mejores calificaciones"],
+        [22, "n", "Students who study with Cramlytic twenty minutes a day get better grades. Cramlytic makes you smarter.", "Los estudiantes que estudian con Cramlytic veinte minutos al día sacan mejores calificaciones. Cramlytic te hace más inteligente."],
+        [30, "x", "Up to 3\u00d7 faster learning", "Aprende hasta 3 veces más rápido"],
+        [30, "n", "Learn up to three times faster.", "Aprende hasta tres veces más rápido."],
+        [35, "n", "Cramlytic. The numbers speak.", "Cramlytic. Los números hablan."],
+        [35, "x", "Tiny fine print: Based on internal data.", "Letra muy pequeña: Basado en datos internos."],
+        [37, "x", "This is a fictional advertisement created for classroom instruction. Cramlytic is not a real company. All statistics in this ad are invented.", "Este es un anuncio ficticio creado para la clase. Cramlytic no es una empresa real. Todas las estadísticas de este anuncio son inventadas."]
+      ],
+      moments: [
+        { t: 6, q: "\u201cForty percent higher\u201d and the bar chart", tags: ["logos", "stats"], why: "A percentage without base numbers, on a chart whose axis starts at 45 to exaggerate the gap." },
+        { t: 11, q: "\u201cOver two million downloads\u201d", tags: ["bandwagon", "stats"], why: "Downloads measure popularity, not learning, and not even how many people use it." },
+        { t: 16, q: "\u201cNine out of ten students recommend\u201d", tags: ["stats"], why: "Who was asked, and how many? (The data inspector reveals it.)" },
+        { t: 22, q: "\u201cMakes you smarter\u201d", tags: ["misleading"], why: "Correlation presented as causation, then exaggerated." },
+        { t: 30, q: "\u201cUp to three times faster\u201d", tags: ["misleading"], why: "\u201cUp to\u201d describes a single best case." },
+        { t: 35, q: "\u201cBased on internal data\u201d", tags: ["stats"], why: "No independent source, shown for under two seconds." }
+      ],
+      analyze: [
+        { type: "inspect", q: "Data inspector: for each claim, write what you'd need to know first. Then reveal the hidden details. (All details are invented.)", items: [
+          ["\u201cUsers score 40% higher on tests.\u201d", "Compared app quizzes: active users averaged 70; students who signed up but never used the app averaged 50. The chart's axis starts at 45.", "\u201cOn in-app practice quizzes, active users averaged 70 and inactive sign-ups averaged 50. This doesn't show the app caused the difference.\u201d"],
+          ["\u201cOver two million downloads.\u201d", "About 180,000 people use it in a typical month.", "\u201cDownloaded over two million times; about 180,000 monthly active users.\u201d"],
+          ["\u201cNine out of ten recommend.\u201d", "A pop-up shown only to users on a 30-day streak; 50 answered.", "\u201cOf 50 users with 30-day streaks who answered an in-app survey, 45 said they'd recommend it.\u201d"],
+          ["\u201c20 minutes a day = better grades. Makes you smarter.\u201d", "Students who used it daily had higher grades on average; no experiment was done.", "\u201cStudents who used it daily tended to have higher grades. We haven't tested whether the app caused this.\u201d"],
+          ["\u201cUp to 3\u00d7 faster learning.\u201d", "One user, on one vocabulary quiz, finished three times faster on a second attempt.", "Remove the claim, or report the typical result."]] },
+        { type: "judge", q: "Match each claim with its main problem.", hint: "Each claim has one main weakness. Use the data inspector's details.", opts: [["base", "Percent without base numbers"], ["pop", "Popularity, not outcomes"], ["sample", "Tiny, self-selected sample"], ["cause", "Correlation as causation"], ["best", "Best-case \u201cup to\u201d"]], items: [
+          ["\u201c40% higher on tests\u201d", "base", "Forty percent of what? 50 to 70 is 40%, and the chart exaggerates it."],
+          ["\u201c2 million downloads\u201d", "pop", "Downloads aren't learning."],
+          ["\u201c9 out of 10 recommend\u201d", "sample", "Only 50 of the most enthusiastic users answered."],
+          ["\u201cMakes you smarter\u201d", "cause", "Higher grades among daily users doesn't show the app caused them."],
+          ["\u201cUp to 3\u00d7 faster\u201d", "best", "One user, one quiz."]] },
+        { type: "mc", q: "Students who use Cramlytic daily have higher grades. What's the best alternative explanation?", hint: "Who chooses to use a study app every day?", o: [
+          ["The app must be working", "That's the conclusion the ad wants, but other explanations fit the same data."],
+          ["Students who already study hard are more likely to use a study app daily", "Yes. Motivated students may choose the app and get better grades for the same reason: they study.", 1],
+          ["Grades are random", "Grades aren't random; the issue is what causes the difference."]] },
+        { type: "mc", q: "What kind of test could show whether the app causes better grades?", hint: "Think about a fair comparison.", o: [
+          ["Ask users if they like the app", "That measures opinion, not learning."],
+          ["Randomly assign similar students to use or not use the app, then compare their grades", "Yes. Random assignment makes the two groups similar except for the app.", 1],
+          ["Count how many people downloaded it", "Downloads don't measure learning."]] }
+      ],
+      evaluate: { q: "Every number in the ad might be technically true. Is the ad still dishonest? Explain using one specific claim.", frame: "Even if \u201c___\u201d is technically true, it leaves the impression that ___, which is misleading because ___.", check: ["I quoted a specific claim.", "I explained the impression it creates.", "I explained what information is missing.", "I made a clear judgment."] },
+      college: { q: "Write the evidence standard a claim like \u201cmakes you smarter\u201d would have to meet before you'd accept it.", frame: "Before accepting this claim, I'd need ___, collected by ___, with ___ participants, measuring ___." },
+      transfer: "Find a number in an ad you've seen (\u201c4 out of 5,\u201d \u201c50% more,\u201d \u201c#1\u201d). What would you need to know to trust it?"
+    },
+    {
+      id: 6, slug: "ethical-advertising", file: "ethical-advertising", dur: 40,
+      title: L("Become the Advertiser", "Conviértete en publicista"), ad: L("\u201cThe Last Bottle You'll Ever Need\u201d for Sipwarden smart water bottle", "\u201cLa última botella que necesitarás\u201d de la botella inteligente Sipwarden"),
+      focus: L("Ethical persuasion and synthesis", "Persuasión ética y síntesis"),
+      target: L("I can diagnose the strategies and reasoning problems in an ad, then rewrite it so it's both persuasive and responsible.", "Puedo diagnosticar las estrategias y los problemas de razonamiento de un anuncio, y luego reescribirlo para que sea persuasivo y responsable."),
+      mission: L("You're the advertising consultant. This ad stacks every trick you've studied. Diagnose it, then fix it.", "Eres el consultor de publicidad. Este anuncio acumula todos los trucos que has estudiado. Diagnostícalo y luego corrígelo."),
+      vocab: ["ethical", "fear", "authority"],
+      example: "An ethical gym ad might say: \u201cFirst month free. Classes for every fitness level, with certified trainers.\u201d It still persuades (a free offer, a welcoming tone), but every claim is checkable and nothing scares or pressures you.",
+      transcript: [
+        [0, "v", "A young Middle Eastern man slumps at his desk in a dim, blue-tinted office.", "Un joven de Medio Oriente está desplomado en su escritorio en una oficina oscura y azulada."],
+        [0, "s", "[Low, ominous drone.]", "[Un zumbido grave y amenazante.]"],
+        [0, "n", "Feeling tired? Foggy? Dehydration could be silently ruining your day.", "¿Te sientes cansado? ¿Nublado? La deshidratación podría estar arruinando tu día en silencio."],
+        [6, "v", "A water bottle's cap ring glows green beside a phone showing a filling water goal.", "El anillo de la tapa de una botella brilla en verde junto a un teléfono que muestra una meta de agua que se llena."],
+        [6, "n", "Meet Sipwarden, the smart bottle that tracks every sip.", "Conoce Sipwarden, la botella inteligente que registra cada trago."],
+        [12, "v", "A fitness influencer films herself with a ring light, holding up the bottle.", "Una influencer de fitness se graba con un aro de luz y muestra la botella."],
+        [12, "x", "Trainer-approved \u2022 2M followers", "Aprobada por entrenadora \u2022 2 millones de seguidores"],
+        [12, "n", "Trainer-approved by Jade Kessler.", "Aprobada por la entrenadora Jade Kessler."],
+        [18, "x", "+37% more energy", "+37 % más energía"],
+        [18, "n", "Sipwarden users report thirty-seven percent more energy.", "Los usuarios de Sipwarden reportan treinta y siete por ciento más energía."],
+        [24, "v", "People of many ages and backgrounds walk toward the camera, each holding up the same bottle.", "Personas de muchas edades y orígenes caminan hacia la cámara, cada una con la misma botella en alto."],
+        [24, "x", "5 million switched", "5 millones ya se cambiaron"],
+        [24, "n", "Join five million people who've already made the switch. Either you track your water, or you're guessing with your health.", "Únete a cinco millones de personas que ya se cambiaron. O registras tu agua, o estás adivinando con tu salud."],
+        [30, "x", "24 oz \u2022 Cold for 12 hours", "24 oz \u2022 Fría por 12 horas"],
+        [30, "n", "It holds twenty-four ounces and keeps drinks cold for twelve hours.", "Tiene capacidad de veinticuatro onzas y mantiene las bebidas frías por doce horas."],
+        [34, "n", "Sipwarden. The last bottle you'll ever need.", "Sipwarden. La última botella que necesitarás."],
+        [37, "x", "This is a fictional advertisement created for classroom instruction. Sipwarden is not a real company. All claims and statistics are invented.", "Este es un anuncio ficticio creado para la clase. Sipwarden no es una empresa real. Todas las afirmaciones y estadísticas son inventadas."]
+      ],
+      moments: [
+        { t: 0, q: "\u201cDehydration could be silently ruining your day\u201d", tags: ["fear", "pathos"], why: "Inflates a common feeling into a hidden threat." },
+        { t: 12, q: "\u201cTrainer-approved by Jade Kessler\u201d and \u201c2M followers\u201d", tags: ["authority", "ethos"], why: "A follower count isn't expertise, and \u201capproved\u201d doesn't say what was tested or whether she was paid." },
+        { t: 18, q: "\u201c37% more energy\u201d", tags: ["stats", "logos"], why: "No source, no sample, no definition of \u201cenergy,\u201d and it's self-reported." },
+        { t: 24, q: "\u201cJoin five million people\u201d", tags: ["bandwagon"], why: "Unverified and irrelevant to whether the bottle helps." },
+        { t: 24, q: "\u201cEither you track your water, or you're guessing with your health\u201d", tags: ["dilemma", "fear"], why: "People drink enough water without tracking every sip." },
+        { t: 30, q: "\u201cHolds 24 ounces, cold for 12 hours\u201d", tags: ["honest"], why: "Specific, testable product facts. Keep these in your rewrite!" },
+        { t: 34, q: "\u201cThe last bottle you'll ever need\u201d", tags: ["misleading"], why: "An exaggeration no product could support." }
+      ],
+      analyze: [],
+      workspace: true,
+      model: "\u201cBusy days make it easy to forget to drink water. Sipwarden's cap glows when it's been a while since your last sip, and the app shows your progress if you like keeping track. It holds 24 ounces and keeps drinks cold for 12 hours. If reminders help you, Sipwarden makes them easy.\u201d",
+      evaluate: { q: "Final reflection: How is your rewrite both persuasive and responsible? What did you keep, cut, and add?", frame: "I kept ___ because ___. I cut ___ because ___. My version still persuades by ___.", check: ["My claims are supported or clearly qualified.", "My emotional appeal fits the facts.", "I didn't use a false choice.", "Any endorser is relevant and disclosed.", "The audience can make an informed decision."] },
+      college: { q: "Write a short creative brief for one specific audience (for example, student athletes or office workers). How does your strategy change for that audience without becoming manipulative?", frame: "For ___, I would emphasize ___ because ___, while avoiding ___." },
+      transfer: "Think of a product you actually like. Write one honest, persuasive sentence an ad could use for it."
+    }
+  ];
+
+  /* ---------- Final report: the honest seventh ad (storyboard only; no video needed) ---------- */
+  D.FINAL_AD = {
+    title: L("\u201cOpen Shelf\u201d for the Maple Street Library", "\u201cEstante abierto\u201d de la Biblioteca Maple Street"),
+    note: L("A storyboard for a fictional public library ad. Read it like you'd watch it. Some ads contain no fallacy at all; decide for yourself.", "Un guion gráfico de un anuncio ficticio para una biblioteca pública. Léelo como si lo vieras. Algunos anuncios no contienen ninguna falacia; decide tú."),
+    rows: [
+      ["0:00", "A grandmother and her grandson read a picture book together on a library beanbag. Soft acoustic guitar.", "Una abuela y su nieto leen un libro ilustrado en un puf de la biblioteca. Suena una guitarra acústica suave."],
+      ["0:04", "Narrator: \u201cSome of the best things in our city are free.\u201d", "Narrador: \u201cAlgunas de las mejores cosas de nuestra ciudad son gratis.\u201d"],
+      ["0:08", "A teenager checks out a laptop at the front desk. A librarian smiles.", "Un adolescente pide prestada una laptop en el mostrador. Una bibliotecaria sonríe."],
+      ["0:10", "Narrator: \u201cWith a free Maple Street Library card, you can borrow books, laptops, and Wi-Fi hotspots, and get homework help on weeknights.\u201d", "Narrador: \u201cCon una tarjeta gratuita de la Biblioteca Maple Street, puedes pedir prestados libros, laptops y puntos de acceso a Wi-Fi, y recibir ayuda con la tarea entre semana.\u201d"],
+      ["0:18", "On screen: Free for city residents. Bring a photo ID or a piece of mail with your address.", "En pantalla: Gratis para residentes de la ciudad. Trae una identificación con foto o una carta con tu dirección."],
+      ["0:22", "Narrator: \u201cLast year, our branch lent out more than forty thousand items.\u201d On screen: Source: Maple Street Library annual report.", "Narrador: \u201cEl año pasado, nuestra sucursal prestó más de cuarenta mil artículos.\u201d En pantalla: Fuente: informe anual de la Biblioteca Maple Street."],
+      ["0:27", "Narrator: \u201cCome find something you love.\u201d On screen: Open seven days a week. Hours at the front desk.", "Narrador: \u201cVen a encontrar algo que te encante.\u201d En pantalla: Abierta los siete días de la semana. Horarios en el mostrador."],
+      ["0:30", "End card: This is a fictional advertisement created for classroom instruction. The library and its statistics are invented.", "Tarjeta final: Este es un anuncio ficticio creado para la clase. La biblioteca y sus estadísticas son inventadas."]
+    ]
+  };
+  D.REPORT = [
+    { id: "claim", n: "1. Central claim", p: "What is the ad's main message or claim?", frame: "The ad's central claim is that ___." },
+    { id: "audience", n: "2. Intended audience", p: "Who is the ad for? What evidence in the ad tells you?", frame: "The ad targets ___, as shown by ___." },
+    { id: "appeals", n: "3. Rhetorical appeals", p: "Identify at least two appeals, each with a specific moment.", frame: "The ad uses ___ when it ___. It also uses ___ when ___." },
+    { id: "evidence", n: "4. Evidence", p: "Give a specific example of the evidence the ad uses, or explain that it offers none.", frame: "The ad supports its claim with ___. / The ad offers no evidence for ___." },
+    { id: "fallacy", n: "5. Fallacies or misleading reasoning", p: "Identify any fallacy or misleading reasoning that is actually present. If there is none, write \u201cNone found\u201d and explain why.", frame: "The ad uses ___ because ___. / None found: ___." },
+    { id: "credibility", n: "6. Credibility", p: "How credible is the ad? Consider sources, expertise, and independence.", frame: "The ad is ___ credible because ___." },
+    { id: "judgment", n: "7. Overall judgment", p: "How effective is the ad, and how ethical? Judge both, separately.", frame: "The ad is effective because ___. Ethically, it is ___ because ___." }
+  ];
+  D.RUBRIC = [
+    ["Identification of persuasive strategies", "Names two or more appeals accurately and explains how they work together", "Names two appeals accurately", "Names one appeal accurately, or two with an error", "Names appeals inaccurately or not at all"],
+    ["Quality of evidence", "Cites precise moments (words, images, sounds) for every claim", "Cites specific moments for most claims", "Cites general or vague evidence", "Gives no evidence from the ad"],
+    ["Depth and accuracy of reasoning", "Explains why each technique works and correctly judges whether reasoning is valid, including when no fallacy is present", "Explains most techniques and judges reasoning accurately", "Identifies techniques but explains little; some reasoning errors", "Lists labels without reasoning"],
+    ["Ethical evaluation", "Weighs effectiveness against honesty and respect for the audience, with a defended judgment", "Makes a clear ethical judgment with a reason", "Makes an ethical judgment without support", "No ethical evaluation"],
+    ["Clarity of written communication", "Organized and precise, with academic vocabulary; easy to follow", "Clear, with mostly accurate vocabulary", "Understandable but disorganized or imprecise", "Hard to follow"]
+  ];
+  return D;
+})();
+
+/* Spanish for activity text, keyed by the exact English in data.js. Missing keys fall back to English.
+   Generated by tools_make_es.js; edit tools_es_values.js and rerun, or edit entries here directly. */
+window.AD_ES = {
+ "In a car ad, a family laughs on a road trip while soft guitar plays. Nothing is said about safety ratings. The appeal is pathos: the ad links the car with family happiness, not with evidence about the car.": "En un anuncio de autos, una familia ríe en un viaje por carretera mientras suena una guitarra suave. No se dice nada sobre la seguridad del auto. La apelación es pathos: el anuncio relaciona el auto con la felicidad familiar, no con evidencia sobre el auto.",
+ "Think of an ad you've seen recently that sells a feeling more than a product. Describe it in two sentences and name the emotion it uses.": "Piensa en un anuncio que hayas visto hace poco que venda un sentimiento más que un producto. Descríbelo en dos oraciones y nombra la emoción que usa.",
+ "The fall: music cuts to silence, then a heartbeat": "La caída: la música se corta en silencio y luego un latido",
+ "Silence and a heartbeat make viewers hold their breath, so the relief that follows feels bigger.": "El silencio y el latido hacen que el público contenga la respiración, así que el alivio que sigue se siente más grande.",
+ "The drink appears at the turning point: “Fuel for the comeback”": "La bebida aparece en el punto de giro: “Energía para el regreso”",
+ "Placing the product right before the comeback invites viewers to credit the drink for the win, without the ad ever saying so.": "Poner el producto justo antes del regreso invita al público a darle el crédito de la victoria a la bebida, sin que el anuncio lo diga.",
+ "The swell and the victory": "La música que crece y la victoria",
+ "Triumphant music attaches pride and relief to the moment right after the product shot.": "La música triunfal une el orgullo y el alivio al momento justo después de mostrar el producto.",
+ "“Built for Champions”": "“Hecha para campeones”",
+ "A slogan about identity: buying it makes you feel like a champion. It isn't a claim anyone could test.": "Un eslogan sobre la identidad: comprarla te hace sentir campeón. No es una afirmación que alguien pueda comprobar.",
+ "Fine print: “Not a substitute for training”": "Letra pequeña: “No sustituye el entrenamiento”",
+ "An honest, checkable disclaimer, though it's on screen for only a moment.": "Una advertencia honesta y verificable, aunque aparece en pantalla solo un momento.",
+ "What is the ad's primary appeal?": "¿Cuál es la apelación principal del anuncio?",
+ "Think about what the ad makes you feel, and what it tells you about the drink itself.": "Piensa en lo que el anuncio te hace sentir y en lo que te dice sobre la bebida misma.",
+ "Logos: it explains how the drink improves performance": "Logos: explica cómo la bebida mejora el rendimiento",
+ "Look again: the ad never gives a fact about the drink's ingredients or effects.": "Vuelve a mirar: el anuncio nunca da un dato sobre los ingredientes ni los efectos de la bebida.",
+ "Pathos: a comeback story links the drink with perseverance and triumph": "Pathos: una historia de superación relaciona la bebida con la perseverancia y el triunfo",
+ "Yes. The persuasion lives in the story, the music, and the timing, not in information about the drink.": "Sí. La persuasión está en la historia, la música y el momento, no en información sobre la bebida.",
+ "Ethos: a famous athlete vouches for the drink": "Ethos: una atleta famosa respalda la bebida",
+ "No athlete endorses it. The runner is a character in a story, not a spokesperson.": "Ninguna atleta la respalda. La corredora es un personaje de una historia, no una vocera.",
+ "Why does the music cut to silence when she falls?": "¿Por qué la música se corta en silencio cuando ella cae?",
+ "Imagine the same fall with upbeat music playing. What would you feel differently?": "Imagina la misma caída con música alegre. ¿Qué sentirías diferente?",
+ "To save money on music licensing": "Para ahorrar dinero en derechos de música",
+ "Production cost isn't the reason; the silence is a deliberate creative choice.": "El costo de producción no es la razón; el silencio es una decisión creativa deliberada.",
+ "To build tension so the swell after the product shot feels like relief": "Para crear tensión y que la música que crece después del producto se sienta como alivio",
+ "Yes. Silence makes viewers hold their breath; the music returns right after the drink appears, so the relief gets linked to the product.": "Sí. El silencio hace que el público contenga la respiración; la música vuelve justo después de que aparece la bebida, así que el alivio queda unido al producto.",
+ "To show that the race is over": "Para mostrar que la carrera terminó",
+ "The race isn't over; she gets up and wins. The silence is about emotion, not plot.": "La carrera no ha terminado; ella se levanta y gana. El silencio tiene que ver con la emoción, no con la trama.",
+ "Sound swap: if the fall played over cheerful pop music, what would most likely change?": "Cambio de sonido: si la caída sonara con música pop alegre, ¿qué cambiaría muy probablemente?",
+ "Music tells viewers how to interpret what they see.": "La música le dice al público cómo interpretar lo que ve.",
+ "Nothing, because music doesn't affect meaning": "Nada, porque la música no afecta el significado",
+ "Music strongly shapes how we interpret images; that's why ads score them so carefully.": "La música influye mucho en cómo interpretamos las imágenes; por eso los anuncios eligen su música con tanto cuidado.",
+ "The fall would feel less serious, so the comeback would feel less powerful": "La caída se sentiría menos seria, así que el regreso se sentiría menos poderoso",
+ "Yes. The emotional meaning comes partly from the score. Same images, different feeling.": "Sí. El significado emocional viene en parte de la música. Las mismas imágenes, otro sentimiento.",
+ "The drink would seem healthier": "La bebida parecería más saludable",
+ "The music would change the mood of the story, not any claim about health.": "La música cambiaría el tono de la historia, no ninguna afirmación sobre la salud.",
+ "Sort each element of the ad.": "Clasifica cada elemento del anuncio.",
+ "Ask: does this make me feel something, or does it tell me something I could check?": "Pregúntate: ¿esto me hace sentir algo, o me dice algo que podría comprobar?",
+ "Emotional appeal": "Apelación emocional",
+ "Information you could check": "Información que podrías comprobar",
+ "“Fuel for the comeback”": "“Energía para el regreso”",
+ "A slogan. It sounds meaningful, but there's nothing to check.": "Un eslogan. Suena importante, pero no hay nada que comprobar.",
+ "The slow-motion fall with a heartbeat": "La caída en cámara lenta con un latido",
+ "Sound and slow motion create suspense.": "El sonido y la cámara lenta crean suspenso.",
+ "“Hydration drink. Not a substitute for training.”": "“Bebida hidratante. No sustituye el entrenamiento.”",
+ "This is a factual statement about what the product is and isn't.": "Es una afirmación de hecho sobre lo que el producto es y lo que no es.",
+ "An identity slogan, not a testable claim.": "Un eslogan de identidad, no una afirmación que se pueda comprobar.",
+ "Teammates rushing to hug her": "Las compañeras que corren a abrazarla",
+ "Belonging and pride.": "Pertenencia y orgullo.",
+ "Does the ad commit a logical fallacy?": "¿El anuncio comete una falacia lógica?",
+ "A fallacy is an error in a stated argument. Does the ad actually state that the drink caused the win?": "Una falacia es un error en un argumento expresado. ¿El anuncio realmente dice que la bebida causó la victoria?",
+ "Yes: it states that the drink caused her win": "Sí: dice que la bebida causó su victoria",
+ "The ad never states that. Listen again to the narration.": "El anuncio nunca dice eso. Vuelve a escuchar la narración.",
+ "Not exactly: it implies the drink helped by placing it at the turning point, which is a misleading implication rather than a stated argument": "No exactamente: implica que la bebida ayudó al ponerla en el punto de giro, lo cual es una implicación engañosa más que un argumento expresado",
+ "Yes. The persuasion works through suggestion. If you argued “it implies false cause,” that's a strong answer when you explain that it's implied, not stated.": "Sí. La persuasión funciona por sugerencia. Si dijiste “implica una causa falsa”, es una respuesta sólida siempre que expliques que está implícito, no dicho.",
+ "No: the ad contains no persuasion at all": "No: el anuncio no contiene ninguna persuasión",
+ "Every element of the ad is persuasive; it just isn't making a stated argument.": "Cada elemento del anuncio es persuasivo; simplemente no expresa un argumento.",
+ "Is this emotional appeal ethically appropriate? Inspiring stories are legitimate, so weigh that against what the ad implies.": "¿Es ética esta apelación emocional? Las historias inspiradoras son legítimas, así que compáralo con lo que el anuncio implica.",
+ "Although the ad is ___, it ___ because ___.": "Aunque el anuncio es ___, ___ porque ___.",
+ "I named a specific moment from the ad.": "Nombré un momento específico del anuncio.",
+ "I said what the ad does well or fairly.": "Dije qué hace bien o de forma justa el anuncio.",
+ "I said what could mislead viewers, if anything.": "Dije qué podría engañar al público, si es que algo.",
+ "I made a clear judgment and gave a reason.": "Hice un juicio claro y di una razón.",
+ "Who is the target audience, and how does the ad define what a “champion” is? Is aspirational storytelling aimed at young athletes fair?": "¿Quién es el público objetivo y cómo define el anuncio a un “campeón”? ¿Es justo contar historias aspiracionales dirigidas a atletas jóvenes?",
+ "The ad targets ___, as shown by ___. It defines a champion as ___, which ___.": "El anuncio está dirigido a ___, como se ve en ___. Define a un campeón como ___, lo cual ___.",
+ "A toothpaste ad features a dentist who explains a study published by an independent university. That's a relevant expert with checkable evidence, a legitimate appeal to expertise. If the same ad used a famous chef instead, the expertise wouldn't match the claim.": "Un anuncio de pasta de dientes presenta a una dentista que explica un estudio publicado por una universidad independiente. Es una experta pertinente con evidencia verificable: una apelación legítima a la experiencia. Si el mismo anuncio usara a un chef famoso, la experiencia no correspondería a la afirmación.",
+ "Think of an ad that uses a doctor, scientist, celebrity, or influencer. Is their expertise relevant to the product? Explain in two or three sentences.": "Piensa en un anuncio que use a un doctor, científico, celebridad o influencer. ¿Su experiencia tiene que ver con el producto? Explícalo en dos o tres oraciones.",
+ "Lab coat, brain scans, and the title “Focus Expert”": "La bata, los escáneres cerebrales y el título “Experto en concentración”",
+ "Costume and set signal science. The title was created for the ad; it isn't a recognized credential.": "El vestuario y el escenario sugieren ciencia. El título se inventó para el anuncio; no es una credencial reconocida.",
+ "“Patented NeuroCalm sound technology”": "“Tecnología de sonido patentada NeuroCalm”",
+ "A patent shows an idea is new, not that it works. The phrase sounds scientific without proving anything.": "Una patente muestra que una idea es nueva, no que funciona. La frase suena científica sin demostrar nada.",
+ "“Nine out of ten students said they felt more focused”": "“Nueve de cada diez estudiantes dijeron que se sintieron más concentrados”",
+ "Ten people, in the company's own test, reporting a feeling.": "Diez personas, en la prueba de la propia empresa, reportando un sentimiento.",
+ "“Trust the science. Trust Brainmoor.”": "“Confía en la ciencia. Confía en Brainmoor.”",
+ "Asks for trust in place of showing any science.": "Pide confianza en lugar de mostrar ciencia.",
+ "The fine print about his PhD and paid role": "La letra pequeña sobre su doctorado y su pago",
+ "An honest disclosure, but it's tiny and brief, and it undercuts everything the ad implied.": "Una divulgación honesta, pero diminuta y breve, y contradice todo lo que el anuncio dio a entender.",
+ "Credential check: is each credential relevant to the claim “these headphones improve focus”?": "Revisión de credenciales: ¿cada credencial es pertinente para la afirmación “estos audífonos mejoran la concentración”?",
+ "Ask whether the expertise matches the claim, and whether the evidence is independent.": "Pregúntate si la experiencia corresponde a la afirmación y si la evidencia es independiente.",
+ "Relevant": "Pertinente",
+ "Partly": "En parte",
+ "Not relevant": "No pertinente",
+ "“Dr.” and “PhD” (the fine print says business administration)": "“Dr.” y “doctorado” (la letra pequeña dice administración de empresas)",
+ "A business PhD isn't training in neuroscience, psychology, or hearing.": "Un doctorado en negocios no es formación en neurociencia, psicología ni audición.",
+ "The title “Focus Expert”": "El título “Experto en concentración”",
+ "Brainmoor made up the title for the ad; it isn't a recognized credential.": "Brainmoor inventó el título para el anuncio; no es una credencial reconocida.",
+ "“Fifteen years studying what helps people perform”": "“Quince años estudiando lo que ayuda a las personas a rendir”",
+ "Workplace productivity experience is related, but it isn't research on headphones or attention.": "La experiencia en productividad laboral tiene relación, pero no es investigación sobre audífonos ni atención.",
+ "The lab coat and brain-scan screens": "La bata de laboratorio y las pantallas con escáneres cerebrales",
+ "Costume and set design are visual signals of science, not evidence.": "El vestuario y la escenografía son señales visuales de ciencia, no evidencia.",
+ "“Patented”": "“Patentada”",
+ "A patent shows an idea is new, not that it works.": "Una patente muestra que una idea es nueva, no que funciona.",
+ "“In our testing” (Brainmoor, 10 participants)": "“En nuestras pruebas” (Brainmoor, 10 participantes)",
+ "It is evidence, but weak: tiny, run by the company, and measuring feelings rather than focus.": "Es evidencia, pero débil: muy pequeña, hecha por la empresa y midiendo sentimientos en lugar de concentración.",
+ "When does an appeal to expertise become a questionable appeal to authority?": "¿Cuándo se vuelve una apelación a la experiencia una apelación cuestionable a la autoridad?",
+ "Experts are often worth listening to. What makes this case different?": "Muchas veces vale la pena escuchar a los expertos. ¿Qué hace diferente este caso?",
+ "Whenever an ad uses an expert": "Siempre que un anuncio usa a un experto",
+ "Not every expert endorsement is fallacious. Relevant, independent experts with evidence are legitimate.": "No todo respaldo de un experto es una falacia. Los expertos pertinentes e independientes, con evidencia, son legítimos.",
+ "When the expertise doesn't match the claim, or the endorsement replaces evidence": "Cuando la experiencia no corresponde a la afirmación o el respaldo reemplaza a la evidencia",
+ "Yes. The question is relevance and evidence, not whether someone has a title.": "Sí. La pregunta es la pertinencia y la evidencia, no si alguien tiene un título.",
+ "When the expert is paid": "Cuando al experto le pagan",
+ "Being paid creates a conflict of interest worth noting, but a paid expert can still be relevant and honest. Payment alone isn't the test.": "Recibir un pago crea un conflicto de interés que vale la pena notar, pero un experto pagado todavía puede ser pertinente y honesto. El pago por sí solo no es la prueba.",
+ "Which endorsement would be a legitimate appeal to expertise for noise-cancelling headphones?": "¿Qué respaldo sería una apelación legítima a la experiencia para unos audífonos con cancelación de ruido?",
+ "Look for relevant expertise plus evidence someone outside the company could check.": "Busca experiencia pertinente más evidencia que alguien fuera de la empresa pueda comprobar.",
+ "A famous basketball player who wears them": "Un jugador de básquetbol famoso que los usa",
+ "Fame isn't expertise in hearing or sound.": "La fama no es experiencia en audición ni en sonido.",
+ "An independent audiologist explaining a published outside lab test of how much noise they block": "Una audióloga independiente que explica una prueba publicada por un laboratorio externo sobre cuánto ruido bloquean",
+ "Yes. The expert's field matches the claim, and the evidence is independent and checkable.": "Sí. El campo de la experta corresponde a la afirmación, y la evidencia es independiente y verificable.",
+ "The company's own scientist, in a lab coat, saying they're the best": "El propio científico de la empresa, con bata, diciendo que son los mejores",
+ "Relevant field, maybe, but no evidence and a conflict of interest.": "Quizá el campo sea pertinente, pero no hay evidencia y hay un conflicto de interés.",
+ "What is the weakest part of “nine out of ten students felt more focused”?": "¿Cuál es la parte más débil de “nueve de cada diez estudiantes se sintieron más concentrados”?",
+ "Read the fine print. Who ran the test, how many people, and what did they measure?": "Lee la letra pequeña. ¿Quién hizo la prueba, con cuántas personas y qué midieron?",
+ "Nine out of ten is a high number": "Nueve de cada diez es un número alto",
+ "A high number isn't the problem; the problem is what's behind it.": "Un número alto no es el problema; el problema es lo que hay detrás.",
+ "The test was run by the company, with ten people, measuring how they felt": "La prueba la hizo la empresa, con diez personas, midiendo cómo se sentían",
+ "Yes. Small, not independent, and self-reported. You'll investigate numbers like this in Case 5.": "Sí. Pequeña, no independiente y basada en lo que las personas reportaron. Investigarás números como este en el Caso 5.",
+ "Students were the participants": "Los participantes fueron estudiantes",
+ "Students are the right audience to test. The method is the weak part.": "Los estudiantes son el público adecuado para la prueba. El método es lo débil.",
+ "Is it ethical to put a business PhD in a lab coat to sell a focus product? Consider what the fine print reveals.": "¿Es ético poner a un doctor en negocios con bata de laboratorio para vender un producto para la concentración? Considera lo que revela la letra pequeña.",
+ "The ad builds ethos by ___, but ___. A more honest version would ___.": "El anuncio construye ethos al ___, pero ___. Una versión más honesta ___.",
+ "I explained what creates credibility in the ad.": "Expliqué qué crea credibilidad en el anuncio.",
+ "I explained whether that credibility is relevant.": "Expliqué si esa credibilidad es pertinente.",
+ "I mentioned the fine print or conflict of interest.": "Mencioné la letra pequeña o el conflicto de interés.",
+ "I made a clear judgment with a reason.": "Hice un juicio claro con una razón.",
+ "What would independent evidence for “improves focus” look like? Who should run the test, with how many people, measuring what?": "¿Cómo sería la evidencia independiente de que “mejora la concentración”? ¿Quién debería hacer la prueba, con cuántas personas y midiendo qué?",
+ "To trust this claim, I would need ___, run by ___, measuring ___.": "Para confiar en esta afirmación, necesitaría ___, hecha por ___, que mida ___.",
+ "A phone ad shows hundreds of people lining up and says “the phone everyone's talking about.” That shows popularity, not quality. If the ad said “rated highest for battery life by an independent testing lab,” that would be evidence about the phone itself.": "Un anuncio de teléfonos muestra a cientos de personas haciendo fila y dice “el teléfono del que todos hablan”. Eso muestra popularidad, no calidad. Si el anuncio dijera “mejor calificado en duración de batería por un laboratorio de pruebas independiente”, eso sí sería evidencia sobre el teléfono.",
+ "Think of an ad or social-media trend that says “everyone” has or does something. Is popularity relevant evidence in that case? Why or why not?": "Piensa en un anuncio o tendencia en redes sociales que diga que “todos” tienen o hacen algo. ¿La popularidad es evidencia pertinente en ese caso? ¿Por qué sí o por qué no?",
+ "“Everybody's switching to Strideborne Drift”": "“Todos se están cambiando a Strideborne Drift”",
+ "An unsupported popularity claim; the montage makes it feel true.": "Una afirmación de popularidad sin respaldo; el montaje hace que parezca cierta.",
+ "The lonely, gray bench shot and “Still wearing last year's look?”": "La escena gris y solitaria en la banca y “¿Todavía con el estilo del año pasado?”",
+ "Exclusion and embarrassment: not owning the shoe is framed as being left out.": "Exclusión y vergüenza: no tener los tenis se presenta como quedarse fuera.",
+ "“Over one million pairs sold” (worldwide since launch)": "“Más de un millón de pares vendidos” (en todo el mundo desde su lanzamiento)",
+ "Even if true, sales show popularity, not quality, and the time span is unknown.": "Aunque sea cierto, las ventas muestran popularidad, no calidad, y no se sabe en cuánto tiempo.",
+ "“Don't get left behind”": "“No te quedes atrás”",
+ "Fear of missing out turns buying into a way to avoid being left out.": "El miedo a perderse algo convierte la compra en una forma de no quedarse fuera.",
+ "Color floods back; “Find your crew”": "El color regresa; “Encuentra a tu grupo”",
+ "The ad sells belonging, not a shoe.": "El anuncio vende pertenencia, no unos tenis.",
+ "Popularity test: is popularity relevant evidence in each situation?": "Prueba de popularidad: ¿la popularidad es evidencia pertinente en cada situación?",
+ "Popularity can prove something is popular. Does it prove the thing being claimed?": "La popularidad puede probar que algo es popular. ¿Prueba lo que se está afirmando?",
+ "A restaurant with 2,000 recent reviews averaging 4.7 stars": "Un restaurante con 2,000 reseñas recientes y un promedio de 4.7 estrellas",
+ "Many independent diners is real evidence about typical experiences, though reviews can be faked or skewed.": "Muchos comensales independientes son evidencia real sobre la experiencia típica, aunque las reseñas pueden ser falsas o estar sesgadas.",
+ "“Everyone at school is wearing them,” as a reason they're good shoes": "“Todos en la escuela los usan”, como razón de que son buenos tenis",
+ "That shows a trend, not comfort or durability.": "Eso muestra una moda, no comodidad ni durabilidad.",
+ "A song with 50 million streams, as proof it's popular": "Una canción con 50 millones de reproducciones, como prueba de que es popular",
+ "Popularity is the claim, so popularity proves it. It doesn't prove you'll like the song.": "La popularidad es la afirmación, así que la popularidad la prueba. No prueba que la canción te vaya a gustar.",
+ "“The most-downloaded study app,” as proof it helps you learn": "“La app de estudio más descargada”, como prueba de que te ayuda a aprender",
+ "Downloads don't show that anyone learned more.": "Las descargas no muestran que alguien haya aprendido más.",
+ "Thousands of verified buyers saying a shoe runs half a size small": "Miles de compradores verificados que dicen que unos tenis son medio número más chicos",
+ "Many independent reports about a specific, checkable fact are useful evidence.": "Muchos reportes independientes sobre un dato específico y verificable son evidencia útil.",
+ "Sort each line or moment by the strategy it mainly uses.": "Clasifica cada línea o momento según la estrategia que usa principalmente.",
+ "Bandwagon is about “everyone.” FOMO is about being left out. Belonging is about joining a group.": "El efecto de arrastre habla de “todos”. El miedo a perderse algo habla de quedarse fuera. La pertenencia habla de unirse a un grupo.",
+ "Bandwagon": "Efecto de arrastre (bandwagon)",
+ "Fear of missing out": "Miedo a perderse algo",
+ "Belonging and identity": "Pertenencia e identidad",
+ "“Everybody's switching to Strideborne Drift.”": "“Todos se están cambiando a Strideborne Drift.”",
+ "“Everybody” is the bandwagon signal.": "“Todos” es la señal del efecto de arrastre.",
+ "“Still wearing last year's look?”": "“¿Todavía con el estilo del año pasado?”",
+ "It makes not having the shoe feel embarrassing and outdated.": "Hace que no tener los tenis se sienta vergonzoso y anticuado.",
+ "“Don't get left behind.”": "“No te quedes atrás.”",
+ "A direct warning about being left out. It also works as bandwagon.": "Una advertencia directa sobre quedarse fuera. También funciona como efecto de arrastre.",
+ "“Find your crew.”": "“Encuentra a tu grupo.”",
+ "Buying the shoe is framed as joining a group.": "Comprar los tenis se presenta como unirse a un grupo.",
+ "#DriftNation": "#DriftNation",
+ "A hashtag that turns customers into a “nation” you can belong to.": "Un hashtag que convierte a los clientes en una “nación” a la que puedes pertenecer.",
+ "What does the ad never tell you about the sneakers?": "¿Qué es lo que el anuncio nunca te dice sobre los tenis?",
+ "List everything you'd want to know before buying shoes.": "Haz una lista de todo lo que querrías saber antes de comprar unos tenis.",
+ "That they're popular": "Que son populares",
+ "That's almost all it tells you.": "Eso es casi lo único que te dice.",
+ "Whether they're comfortable, durable, well made, or worth the price": "Si son cómodos, duraderos, bien hechos o si valen lo que cuestan",
+ "Yes. The ad sells belonging and leaves out everything about the shoe itself.": "Sí. El anuncio vende pertenencia y deja fuera todo sobre los tenis mismos.",
+ "What color they are": "De qué color son",
+ "The ad shows the color clearly.": "El anuncio muestra el color claramente.",
+ "Targeting young people's need to belong is effective. Is it fair? Consider who might be affected.": "Apelar a la necesidad de pertenencia de los jóvenes es efectivo. ¿Es justo? Considera a quién podría afectar.",
+ "This ad is effective because ___. However, it could affect ___ because ___.": "Este anuncio es efectivo porque ___. Sin embargo, podría afectar a ___ porque ___.",
+ "I explained why the appeal works.": "Expliqué por qué funciona la apelación.",
+ "I named who might be affected.": "Nombré a quién podría afectar.",
+ "I avoided saying all fashion advertising is unethical.": "Evité decir que toda la publicidad de moda es poco ética.",
+ "How does the ad define who belongs? Who is absent from the “crew,” and what does that suggest about the target audience?": "¿Cómo define el anuncio quién pertenece? ¿Quién no aparece en el “grupo” y qué sugiere eso sobre el público objetivo?",
+ "The ad defines belonging as ___. It leaves out ___, which suggests ___.": "El anuncio define la pertenencia como ___. Deja fuera a ___, lo cual sugiere ___.",
+ "“Either you join the debate team, or you'll never be a good speaker.” That's a false dilemma: you could take a speech class, practice at home, or join a different club. Compare: “The bus leaves at 7:10. Either you're on it, or you'll need another ride.” That one is a genuine two-option situation.": "“O te unes al equipo de debate, o nunca serás un buen orador.” Eso es un falso dilema: podrías tomar una clase de oratoria, practicar en casa o unirte a otro club. Compara: “El autobús sale a las 7:10. O estás en él, o necesitarás otro transporte.” Esa sí es una situación con dos opciones reales.",
+ "Think of an ad, announcement, or argument that offered only two options. Were there really only two? Name one option it left out.": "Piensa en un anuncio, aviso o argumento que ofreciera solo dos opciones. ¿De verdad había solo dos? Nombra una opción que dejó fuera.",
+ "“There are two kinds of students”": "“Hay dos tipos de estudiantes”",
+ "Sets up only two categories when students vary in countless ways.": "Plantea solo dos categorías cuando los estudiantes son diferentes de muchísimas maneras.",
+ "The split screen: gray chaos vs. bright calm": "La pantalla dividida: caos gris contra calma luminosa",
+ "The visual makes the false choice feel natural: stress on one side, success on the other.": "La imagen hace que la falsa elección parezca natural: estrés de un lado, éxito del otro.",
+ "The glowing A on the tablet": "La A que brilla en la tableta",
+ "Implies the tablet produces better grades, with no evidence.": "Implica que la tableta produce mejores calificaciones, sin evidencia.",
+ "“Either you upgrade, or you fall behind”": "“O te actualizas, o te quedas atrás”",
+ "The core false dilemma, with a fear of falling behind attached.": "El falso dilema central, con el miedo a quedarse atrás incluido.",
+ "“The choice is yours” as the gray side fades to black": "“Tú decides” mientras el lado gris se funde a negro",
+ "It offers “choice” after erasing every option but one.": "Ofrece “elegir” después de borrar todas las opciones menos una.",
+ "Option finder: list at least three options the ad hides. Then compare with the investigator's list.": "Buscador de opciones: haz una lista de al menos tres opciones que el anuncio oculta. Luego compárala con la lista del investigador.",
+ "Think about other devices, other study methods, and what actually helps students succeed.": "Piensa en otros dispositivos, otras formas de estudiar y lo que de verdad ayuda a los estudiantes a tener éxito.",
+ "Other tablets, laptops, or the school-issued device": "Otras tabletas, laptops o el dispositivo de la escuela",
+ "Paper notebooks and planners that work fine for many students": "Cuadernos y agendas de papel que funcionan bien para muchos estudiantes",
+ "Free apps on a device you already have": "Apps gratuitas en un dispositivo que ya tienes",
+ "Study habits, sleep, and support from teachers, which matter more than any device": "Los hábitos de estudio, el sueño y el apoyo de los maestros, que importan más que cualquier dispositivo",
+ "Keeping your current device: not upgrading doesn't mean falling behind": "Quedarte con tu dispositivo actual: no actualizarte no significa quedarte atrás",
+ "Genuine or false? Two of these are genuine two-option situations.": "¿Real o falso? Dos de estas son situaciones con dos opciones reales.",
+ "A genuine two-option situation has a rule or fact that truly allows only two outcomes.": "Una situación con dos opciones reales tiene una regla o un hecho que de verdad permite solo dos resultados.",
+ "False dilemma": "Falso dilema",
+ "Genuine two options": "Dos opciones reales",
+ "“Either you upgrade to Quillon Slate, or you fall behind.”": "“O te actualizas a Quillon Slate, o te quedas atrás.”",
+ "Many other paths exist.": "Existen muchos otros caminos.",
+ "“The early-registration deadline is Friday at 5 p.m. Either you register by then, or you pay the regular price.”": "“La fecha límite de inscripción anticipada es el viernes a las 5 p. m. O te inscribes antes, o pagas el precio regular.”",
+ "The rule truly creates only two outcomes.": "La regla de verdad crea solo dos resultados.",
+ "“Either you support the new schedule, or you don't care about students.”": "“O apoyas el nuevo horario, o no te importan los estudiantes.”",
+ "People can care about students and still disagree about the schedule.": "Las personas pueden preocuparse por los estudiantes y aun así no estar de acuerdo con el horario.",
+ "“The file either finished uploading or it didn't.”": "“El archivo terminó de subirse o no.”",
+ "A completed upload is a yes-or-no fact.": "Que un archivo se haya subido es un hecho de sí o no.",
+ "“You're either a math person or you're not.”": "“O eres bueno para las matemáticas, o no lo eres.”",
+ "Skills develop with practice; most people are somewhere in between.": "Las habilidades se desarrollan con práctica; la mayoría de las personas está en algún punto intermedio.",
+ "Rewrite “Either you upgrade, or you fall behind” so it's logically defensible but still persuasive.": "Reescribe “O te actualizas, o te quedas atrás” para que sea lógicamente defendible y siga siendo persuasivo.",
+ "If you ___, Quillon Slate can help you ___.": "Si ___, Quillon Slate te puede ayudar a ___.",
+ "“If you take lots of handwritten notes and want them organized and searchable, Quillon Slate is one option worth comparing.”": "“Si tomas muchas notas a mano y quieres tenerlas organizadas y fáciles de buscar, Quillon Slate es una opción que vale la pena comparar.”",
+ "My rewrite names a specific benefit.": "Mi versión nombra un beneficio específico.",
+ "It names who it's for.": "Dice para quién es.",
+ "It leaves room for other choices.": "Deja espacio para otras opciones.",
+ "It's still persuasive.": "Sigue siendo persuasiva.",
+ "Is it fair for an ad aimed at students to frame not buying as “falling behind”? Explain.": "¿Es justo que un anuncio dirigido a estudiantes presente no comprar como “quedarse atrás”? Explica.",
+ "This framing is ___ because ___. Students might ___.": "Este enfoque es ___ porque ___. Los estudiantes podrían ___.",
+ "I explained how the false dilemma works.": "Expliqué cómo funciona el falso dilema.",
+ "I considered the effect on students.": "Consideré el efecto en los estudiantes.",
+ "Compare this ad with Case 3. Both frame not buying as a loss. How does a false choice combine with bandwagon pressure, and which is more persuasive for teens?": "Compara este anuncio con el Caso 3. Los dos presentan no comprar como una pérdida. ¿Cómo se combina una falsa elección con la presión de grupo, y cuál es más persuasivo para los adolescentes?",
+ "Both ads ___. However, Case 3 relies on ___, while Case 4 relies on ___.": "Los dos anuncios ___. Sin embargo, el Caso 3 se basa en ___, mientras que el Caso 4 se basa en ___.",
+ "“Our juice has 50% less sugar!” Less than what? If the comparison is to a soda, the juice could still be very sugary. Good investigators ask: compared to what, measured how, and according to whom?": "“¡Nuestro jugo tiene 50 % menos azúcar!” ¿Menos que qué? Si la comparación es con un refresco, el jugo todavía podría tener mucha azúcar. Quien investiga bien pregunta: ¿comparado con qué, medido cómo y según quién?",
+ "Find a number in an ad you've seen (“4 out of 5,” “50% more,” “#1”). What would you need to know to trust it?": "Busca un número en un anuncio que hayas visto (“4 de cada 5”, “50 % más”, “#1”). ¿Qué necesitarías saber para confiar en él?",
+ "“Forty percent higher” and the bar chart": "“Un cuarenta por ciento más” y la gráfica de barras",
+ "A percentage without base numbers, on a chart whose axis starts at 45 to exaggerate the gap.": "Un porcentaje sin los números de base, en una gráfica cuyo eje empieza en 45 para exagerar la diferencia.",
+ "“Over two million downloads”": "“Más de dos millones de descargas”",
+ "Downloads measure popularity, not learning, and not even how many people use it.": "Las descargas miden popularidad, no aprendizaje, y ni siquiera cuántas personas la usan.",
+ "“Nine out of ten students recommend”": "“Nueve de cada diez estudiantes recomiendan”",
+ "Who was asked, and how many? (The data inspector reveals it.)": "¿A quién le preguntaron y a cuántos? (El inspector de datos lo revela.)",
+ "“Makes you smarter”": "“Te hace más inteligente”",
+ "Correlation presented as causation, then exaggerated.": "Una correlación presentada como causalidad, y además exagerada.",
+ "“Up to three times faster”": "“Hasta tres veces más rápido”",
+ "“Up to” describes a single best case.": "“Hasta” describe un solo caso, el mejor.",
+ "“Based on internal data”": "“Basado en datos internos”",
+ "No independent source, shown for under two seconds.": "Sin fuente independiente, y en pantalla menos de dos segundos.",
+ "Data inspector: for each claim, write what you'd need to know first. Then reveal the hidden details. (All details are invented.)": "Inspector de datos: para cada afirmación, escribe primero lo que necesitarías saber. Luego muestra los detalles ocultos. (Todos los detalles son inventados.)",
+ "“Users score 40% higher on tests.”": "“Los usuarios sacan un 40 % más en los exámenes.”",
+ "Compared app quizzes: active users averaged 70; students who signed up but never used the app averaged 50. The chart's axis starts at 45.": "Se compararon cuestionarios dentro de la app: los usuarios activos promediaron 70; los estudiantes que se registraron pero nunca usaron la app promediaron 50. El eje de la gráfica empieza en 45.",
+ "“On in-app practice quizzes, active users averaged 70 and inactive sign-ups averaged 50. This doesn't show the app caused the difference.”": "“En los cuestionarios de práctica dentro de la app, los usuarios activos promediaron 70 y los registrados inactivos promediaron 50. Esto no muestra que la app haya causado la diferencia.”",
+ "“Over two million downloads.”": "“Más de dos millones de descargas.”",
+ "About 180,000 people use it in a typical month.": "Alrededor de 180,000 personas la usan en un mes típico.",
+ "“Downloaded over two million times; about 180,000 monthly active users.”": "“Descargada más de dos millones de veces; alrededor de 180,000 usuarios activos al mes.”",
+ "“Nine out of ten recommend.”": "“Nueve de cada diez la recomiendan.”",
+ "A pop-up shown only to users on a 30-day streak; 50 answered.": "Una ventana emergente mostrada solo a usuarios con una racha de 30 días; respondieron 50.",
+ "“Of 50 users with 30-day streaks who answered an in-app survey, 45 said they'd recommend it.”": "“De 50 usuarios con rachas de 30 días que respondieron una encuesta en la app, 45 dijeron que la recomendarían.”",
+ "“20 minutes a day = better grades. Makes you smarter.”": "“20 minutos al día = mejores calificaciones. Te hace más inteligente.”",
+ "Students who used it daily had higher grades on average; no experiment was done.": "Los estudiantes que la usaban a diario tenían, en promedio, mejores calificaciones; no se hizo ningún experimento.",
+ "“Students who used it daily tended to have higher grades. We haven't tested whether the app caused this.”": "“Los estudiantes que la usaban a diario tendían a tener mejores calificaciones. No hemos comprobado si la app causó esto.”",
+ "“Up to 3× faster learning.”": "“Aprende hasta 3 veces más rápido.”",
+ "One user, on one vocabulary quiz, finished three times faster on a second attempt.": "Un usuario, en un cuestionario de vocabulario, terminó tres veces más rápido en su segundo intento.",
+ "Remove the claim, or report the typical result.": "Quitar la afirmación o informar el resultado típico.",
+ "Match each claim with its main problem.": "Relaciona cada afirmación con su problema principal.",
+ "Each claim has one main weakness. Use the data inspector's details.": "Cada afirmación tiene una debilidad principal. Usa los detalles del inspector de datos.",
+ "Percent without base numbers": "Porcentaje sin números de base",
+ "Popularity, not outcomes": "Popularidad, no resultados",
+ "Tiny, self-selected sample": "Muestra pequeña y autoseleccionada",
+ "Correlation as causation": "Correlación presentada como causalidad",
+ "Best-case “up to”": "El mejor caso: “hasta”",
+ "“40% higher on tests”": "“40 % más en los exámenes”",
+ "Forty percent of what? 50 to 70 is 40%, and the chart exaggerates it.": "¿Cuarenta por ciento de qué? De 50 a 70 es un 40 %, y la gráfica lo exagera.",
+ "“2 million downloads”": "“2 millones de descargas”",
+ "Downloads aren't learning.": "Las descargas no son aprendizaje.",
+ "“9 out of 10 recommend”": "“9 de cada 10 la recomiendan”",
+ "Only 50 of the most enthusiastic users answered.": "Solo respondieron 50 de los usuarios más entusiastas.",
+ "Higher grades among daily users doesn't show the app caused them.": "Que quienes la usan a diario tengan mejores calificaciones no muestra que la app las haya causado.",
+ "“Up to 3× faster”": "“Hasta 3 veces más rápido”",
+ "One user, one quiz.": "Un usuario, un cuestionario.",
+ "Students who use Cramlytic daily have higher grades. What's the best alternative explanation?": "Los estudiantes que usan Cramlytic a diario tienen mejores calificaciones. ¿Cuál es la mejor explicación alternativa?",
+ "Who chooses to use a study app every day?": "¿Quién elige usar una app de estudio todos los días?",
+ "The app must be working": "La app debe estar funcionando",
+ "That's the conclusion the ad wants, but other explanations fit the same data.": "Esa es la conclusión que quiere el anuncio, pero otras explicaciones encajan con los mismos datos.",
+ "Students who already study hard are more likely to use a study app daily": "Los estudiantes que ya estudian mucho tienen más probabilidad de usar una app de estudio a diario",
+ "Yes. Motivated students may choose the app and get better grades for the same reason: they study.": "Sí. Los estudiantes motivados podrían elegir la app y sacar mejores calificaciones por la misma razón: estudian.",
+ "Grades are random": "Las calificaciones son al azar",
+ "Grades aren't random; the issue is what causes the difference.": "Las calificaciones no son al azar; la cuestión es qué causa la diferencia.",
+ "What kind of test could show whether the app causes better grades?": "¿Qué tipo de prueba podría mostrar si la app causa mejores calificaciones?",
+ "Think about a fair comparison.": "Piensa en una comparación justa.",
+ "Ask users if they like the app": "Preguntarles a los usuarios si les gusta la app",
+ "That measures opinion, not learning.": "Eso mide opiniones, no aprendizaje.",
+ "Randomly assign similar students to use or not use the app, then compare their grades": "Asignar al azar a estudiantes similares a usar o no usar la app, y luego comparar sus calificaciones",
+ "Yes. Random assignment makes the two groups similar except for the app.": "Sí. La asignación al azar hace que los dos grupos sean parecidos, excepto por la app.",
+ "Count how many people downloaded it": "Contar cuántas personas la descargaron",
+ "Downloads don't measure learning.": "Las descargas no miden el aprendizaje.",
+ "Every number in the ad might be technically true. Is the ad still dishonest? Explain using one specific claim.": "Cada número del anuncio podría ser técnicamente cierto. ¿Aun así es deshonesto el anuncio? Explica con una afirmación específica.",
+ "Even if “___” is technically true, it leaves the impression that ___, which is misleading because ___.": "Aunque “___” sea técnicamente cierto, deja la impresión de que ___, lo cual es engañoso porque ___.",
+ "I quoted a specific claim.": "Cité una afirmación específica.",
+ "I explained the impression it creates.": "Expliqué la impresión que crea.",
+ "I explained what information is missing.": "Expliqué qué información falta.",
+ "I made a clear judgment.": "Hice un juicio claro.",
+ "Write the evidence standard a claim like “makes you smarter” would have to meet before you'd accept it.": "Escribe el estándar de evidencia que una afirmación como “te hace más inteligente” tendría que cumplir antes de que la aceptaras.",
+ "Before accepting this claim, I'd need ___, collected by ___, with ___ participants, measuring ___.": "Antes de aceptar esta afirmación, necesitaría ___, recopilado por ___, con ___ participantes, que mida ___.",
+ "An ethical gym ad might say: “First month free. Classes for every fitness level, with certified trainers.” It still persuades (a free offer, a welcoming tone), but every claim is checkable and nothing scares or pressures you.": "Un anuncio ético de un gimnasio podría decir: “Primer mes gratis. Clases para todos los niveles, con entrenadores certificados.” Sigue persuadiendo (una oferta gratuita, un tono acogedor), pero cada afirmación se puede comprobar y nada te asusta ni te presiona.",
+ "Think of a product you actually like. Write one honest, persuasive sentence an ad could use for it.": "Piensa en un producto que de verdad te guste. Escribe una oración honesta y persuasiva que un anuncio podría usar.",
+ "“Dehydration could be silently ruining your day”": "“La deshidratación podría estar arruinando tu día en silencio”",
+ "Inflates a common feeling into a hidden threat.": "Convierte un sentimiento común en una amenaza oculta.",
+ "“Trainer-approved by Jade Kessler” and “2M followers”": "“Aprobada por la entrenadora Jade Kessler” y “2 millones de seguidores”",
+ "A follower count isn't expertise, and “approved” doesn't say what was tested or whether she was paid.": "El número de seguidores no es experiencia, y “aprobada” no dice qué se probó ni si le pagaron.",
+ "“37% more energy”": "“37 % más energía”",
+ "No source, no sample, no definition of “energy,” and it's self-reported.": "Sin fuente, sin muestra, sin definir qué es “energía”, y basado en lo que las personas reportan.",
+ "“Join five million people”": "“Únete a cinco millones de personas”",
+ "Unverified and irrelevant to whether the bottle helps.": "No está comprobado y no tiene que ver con si la botella ayuda.",
+ "“Either you track your water, or you're guessing with your health”": "“O registras tu agua, o estás adivinando con tu salud”",
+ "People drink enough water without tracking every sip.": "La gente toma suficiente agua sin registrar cada trago.",
+ "“Holds 24 ounces, cold for 12 hours”": "“Capacidad de 24 onzas, fría por 12 horas”",
+ "Specific, testable product facts. Keep these in your rewrite!": "Datos del producto específicos y comprobables. ¡Consérvalos en tu versión!",
+ "“The last bottle you'll ever need”": "“La última botella que necesitarás”",
+ "An exaggeration no product could support.": "Una exageración que ningún producto podría respaldar.",
+ "Final reflection: How is your rewrite both persuasive and responsible? What did you keep, cut, and add?": "Reflexión final: ¿Cómo es tu versión persuasiva y responsable a la vez? ¿Qué conservaste, qué quitaste y qué añadiste?",
+ "I kept ___ because ___. I cut ___ because ___. My version still persuades by ___.": "Conservé ___ porque ___. Quité ___ porque ___. Mi versión todavía persuade al ___.",
+ "My claims are supported or clearly qualified.": "Mis afirmaciones están respaldadas o claramente matizadas.",
+ "My emotional appeal fits the facts.": "Mi apelación emocional corresponde a los hechos.",
+ "I didn't use a false choice.": "No usé una falsa elección.",
+ "Any endorser is relevant and disclosed.": "Cualquier persona que respalde el producto es pertinente y se aclara su relación.",
+ "The audience can make an informed decision.": "El público puede tomar una decisión informada.",
+ "Write a short creative brief for one specific audience (for example, student athletes or office workers). How does your strategy change for that audience without becoming manipulative?": "Escribe un breve resumen creativo para un público específico (por ejemplo, estudiantes atletas o personas que trabajan en oficina). ¿Cómo cambia tu estrategia para ese público sin volverse manipuladora?",
+ "For ___, I would emphasize ___ because ___, while avoiding ___.": "Para ___, destacaría ___ porque ___, evitando ___.",
+ "“Busy days make it easy to forget to drink water. Sipwarden's cap glows when it's been a while since your last sip, and the app shows your progress if you like keeping track. It holds 24 ounces and keeps drinks cold for 12 hours. If reminders help you, Sipwarden makes them easy.”": "“Con días ocupados es fácil olvidarse de tomar agua. La tapa de Sipwarden brilla cuando ha pasado un rato desde tu último trago, y la app muestra tu progreso si te gusta llevar la cuenta. Tiene capacidad de 24 onzas y mantiene las bebidas frías por 12 horas. Si los recordatorios te ayudan, Sipwarden los hace fáciles.”",
+ "1. Central claim": "1. Afirmación central",
+ "What is the ad's main message or claim?": "¿Cuál es el mensaje o la afirmación principal del anuncio?",
+ "The ad's central claim is that ___.": "La afirmación central del anuncio es que ___.",
+ "2. Intended audience": "2. Público objetivo",
+ "Who is the ad for? What evidence in the ad tells you?": "¿Para quién es el anuncio? ¿Qué evidencia en el anuncio te lo indica?",
+ "The ad targets ___, as shown by ___.": "El anuncio está dirigido a ___, como se ve en ___.",
+ "3. Rhetorical appeals": "3. Apelaciones retóricas",
+ "Identify at least two appeals, each with a specific moment.": "Identifica al menos dos apelaciones, cada una con un momento específico.",
+ "The ad uses ___ when it ___. It also uses ___ when ___.": "El anuncio usa ___ cuando ___. También usa ___ cuando ___.",
+ "4. Evidence": "4. Evidencia",
+ "Give a specific example of the evidence the ad uses, or explain that it offers none.": "Da un ejemplo específico de la evidencia que usa el anuncio, o explica que no ofrece ninguna.",
+ "The ad supports its claim with ___. / The ad offers no evidence for ___.": "El anuncio respalda su afirmación con ___. / El anuncio no ofrece evidencia de ___.",
+ "5. Fallacies or misleading reasoning": "5. Falacias o razonamiento engañoso",
+ "Identify any fallacy or misleading reasoning that is actually present. If there is none, write “None found” and explain why.": "Identifica cualquier falacia o razonamiento engañoso que de verdad esté presente. Si no hay ninguno, escribe “No encontré ninguna” y explica por qué.",
+ "The ad uses ___ because ___. / None found: ___.": "El anuncio usa ___ porque ___. / No encontré ninguna: ___.",
+ "6. Credibility": "6. Credibilidad",
+ "How credible is the ad? Consider sources, expertise, and independence.": "¿Qué tan creíble es el anuncio? Considera las fuentes, la experiencia y la independencia.",
+ "The ad is ___ credible because ___.": "El anuncio es ___ creíble porque ___.",
+ "7. Overall judgment": "7. Juicio general",
+ "How effective is the ad, and how ethical? Judge both, separately.": "¿Qué tan efectivo es el anuncio y qué tan ético? Juzga las dos cosas por separado.",
+ "The ad is effective because ___. Ethically, it is ___ because ___.": "El anuncio es efectivo porque ___. Éticamente, es ___ porque ___.",
+ "Identification of persuasive strategies": "Identificación de estrategias persuasivas",
+ "Names two or more appeals accurately and explains how they work together": "Nombra con exactitud dos o más apelaciones y explica cómo funcionan juntas",
+ "Names two appeals accurately": "Nombra con exactitud dos apelaciones",
+ "Names one appeal accurately, or two with an error": "Nombra con exactitud una apelación, o dos con un error",
+ "Names appeals inaccurately or not at all": "Nombra las apelaciones de forma inexacta o no las nombra",
+ "Quality of evidence": "Calidad de la evidencia",
+ "Cites precise moments (words, images, sounds) for every claim": "Cita momentos precisos (palabras, imágenes, sonidos) para cada afirmación",
+ "Cites specific moments for most claims": "Cita momentos específicos para la mayoría de las afirmaciones",
+ "Cites general or vague evidence": "Cita evidencia general o vaga",
+ "Gives no evidence from the ad": "No da evidencia del anuncio",
+ "Depth and accuracy of reasoning": "Profundidad y exactitud del razonamiento",
+ "Explains why each technique works and correctly judges whether reasoning is valid, including when no fallacy is present": "Explica por qué funciona cada técnica y juzga correctamente si el razonamiento es válido, incluso cuando no hay ninguna falacia",
+ "Explains most techniques and judges reasoning accurately": "Explica la mayoría de las técnicas y juzga el razonamiento con exactitud",
+ "Identifies techniques but explains little; some reasoning errors": "Identifica técnicas pero explica poco; algunos errores de razonamiento",
+ "Lists labels without reasoning": "Enumera etiquetas sin razonamiento",
+ "Ethical evaluation": "Evaluación ética",
+ "Weighs effectiveness against honesty and respect for the audience, with a defended judgment": "Compara la efectividad con la honestidad y el respeto al público, con un juicio defendido",
+ "Makes a clear ethical judgment with a reason": "Hace un juicio ético claro con una razón",
+ "Makes an ethical judgment without support": "Hace un juicio ético sin apoyo",
+ "No ethical evaluation": "No hay evaluación ética",
+ "Clarity of written communication": "Claridad de la comunicación escrita",
+ "Organized and precise, with academic vocabulary; easy to follow": "Organizada y precisa, con vocabulario académico; fácil de seguir",
+ "Clear, with mostly accurate vocabulary": "Clara, con vocabulario mayormente correcto",
+ "Understandable but disorganized or imprecise": "Comprensible pero desorganizada o imprecisa",
+ "Hard to follow": "Difícil de seguir"
+};
+
+</script>
+<script>
+/* Ad Detective — app engine. No accounts, no network calls, no trackers. Work is saved only in this browser. */
+(function () {
+  "use strict";
+  const D = window.AD, KEY = "addetective-v1";
+  const $ = (s, r) => (r || document).querySelector(s);
+  const E = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  const words = s => (String(s || "").trim().match(/\S+/g) || []).length;
+  const mmss = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+
+  /* ---------- state ---------- */
+  const fresh = () => ({ lang: "en", level: "hs", cases: {}, report: { choice: "story", real: "", f: {} }, custom: {} });
+  let S, storageOK = true;
+  try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) { S = fresh(); storageOK = false; }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { storageOK = false; } };
+  const C = id => (S.cases[id] = S.cases[id] || { brief: false, watched: false, tags: {}, cmp: {}, why: {}, a: {} });
+  const A = (id, k) => (C(id).a[k] = C(id).a[k] || {});
+  const T = p => (Array.isArray(p) ? (S.lang === "es" ? p[1] : p[0]) : p);
+  const es = () => S.lang === "es";
+  const X = s => (es() && window.AD_ES && window.AD_ES[s]) || s; /* Spanish for activity text */
+
+  /* ---------- interface text ---------- */
+  const U = {
+    skip: ["Skip to main content", "Saltar al contenido principal"],
+    cases: ["Cases", "Casos"], notebook: ["Notebook", "Cuaderno"], report: ["Final report", "Informe final"], glossary: ["Vocabulary", "Vocabulario"], teacher: ["Teacher", "Maestro"],
+    hs: ["High School", "Preparatoria"], col: ["College challenge", "Reto universitario"], level: ["Level", "Nivel"],
+    tagline: ["Look beyond the advertisement. Investigate the message.", "Mira más allá del anuncio. Investiga el mensaje."],
+    mission: ["Your mission: investigate the message", "Tu misión: investigar el mensaje"],
+    heroP: ["Every advertisement has a strategy. In six cases, you'll collect evidence, name the techniques, spot the flaws, and decide what's fair. Persuasive doesn't always mean truthful, and it doesn't always mean dishonest either.", "Cada anuncio tiene una estrategia. En seis casos, reunirás evidencia, nombrarás las técnicas, detectarás las fallas y decidirás qué es justo. Persuasivo no siempre significa verdadero, pero tampoco siempre significa deshonesto."],
+    startCase1: ["Open Case 1", "Abrir el Caso 1"], cont: ["Continue", "Continuar"], replay: ["Replay the example", "Repetir el ejemplo"],
+    distinct: ["Four ideas you'll use in every case", "Cuatro ideas que usarás en cada caso"],
+    cycle: ["How each case works", "Cómo funciona cada caso"],
+    steps: [["Brief", "Resumen"], ["Watch", "Mira"], ["Evidence", "Evidencia"], ["Analyze", "Analiza"], ["Evaluate", "Evalúa"]],
+    stepsHelp: [["Read the mission and key words.", "Lee la misión y las palabras clave."], ["Watch the ad or read the transcript.", "Mira el anuncio o lee la transcripción."], ["Tag the persuasive moments.", "Etiqueta los momentos persuasivos."], ["Answer, sort, and explain.", "Responde, clasifica y explica."], ["Judge the reasoning and the ethics.", "Juzga el razonamiento y la ética."]],
+    privacy: ["Your work saves only in this browser. Shared or school-managed computers may clear it, so download a backup from your Notebook. Ad Detective never asks for your name or email.", "Tu trabajo se guarda solo en este navegador. Las computadoras compartidas o de la escuela pueden borrarlo, así que descarga una copia desde tu Cuaderno. Ad Detective nunca te pide tu nombre ni tu correo."],
+    noStorage: ["This browser isn't saving your work. Copy or download it before you leave.", "Este navegador no está guardando tu trabajo. Cópialo o descárgalo antes de salir."],
+    caseN: ["Case", "Caso"], focus: ["Focus", "Enfoque"], target: ["Learning target", "Objetivo de aprendizaje"],
+    keyWords: ["Key words", "Palabras clave"], worked: ["Worked example", "Ejemplo resuelto"], begin: ["Start the investigation", "Empezar la investigación"],
+    cantPlay: ["This browser can't play the video. Try Chrome or Safari, or use the transcript below; it has everything you need.", "Este navegador no puede reproducir el video. Prueba con Chrome o Safari, o usa la transcripción de abajo; tiene todo lo que necesitas."],
+    videoMissing: ["The video for this case hasn't been added yet. Everything you need is in the transcript.", "El video de este caso todavía no se ha añadido. Todo lo que necesitas está en la transcripción."],
+    transcript: ["Transcript", "Transcripción"], see: ["See", "Ves"], hear: ["Narrator", "Narrador"], onscreen: ["On screen", "En pantalla"], sound: ["Sound", "Sonido"],
+    watched: ["I've watched or read the ad", "Ya vi o leí el anuncio"], watchedDone: ["Watched", "Visto"],
+    evidenceP: ["Tag each moment with the techniques you see. A moment can use more than one, and some use none. Then compare with the investigator.", "Etiqueta cada momento con las técnicas que ves. Un momento puede usar más de una, y algunos no usan ninguna. Luego compara con el investigador."],
+    whyNote: ["Your explanation (evidence card)", "Tu explicación (tarjeta de evidencia)"], compare: ["Compare with the investigator", "Comparar con el investigador"],
+    both: ["You both tagged", "Ambos etiquetaron"], missed: ["The investigator also tagged", "El investigador también etiquetó"], extra: ["Only you tagged", "Solo tú etiquetaste"],
+    extraNote: ["Not necessarily wrong. If you can defend it with evidence, explain it in your card.", "No necesariamente está mal. Si puedes defenderlo con evidencia, explícalo en tu tarjeta."],
+    seek: ["Jump to", "Ir a"], addOwn: ["Add your own evidence", "Agregar tu propia evidencia"], ownLine: ["Choose a line from the transcript", "Elige una línea de la transcripción"], addCard: ["Add evidence card", "Agregar tarjeta de evidencia"], remove: ["Remove", "Quitar"],
+    hint: ["Show a hint", "Mostrar una pista"], tryAgain: ["Not yet. Read the feedback and try again.", "Todavía no. Lee la retroalimentación e inténtalo de nuevo."], showAns: ["Show the answer", "Mostrar la respuesta"],
+    check: ["Check my answers", "Revisar mis respuestas"], choose: ["Choose…", "Elige…"],
+    compareList: ["Compare with the investigator's list", "Comparar con la lista del investigador"], reveal: ["Reveal the hidden details", "Mostrar los detalles ocultos"], needFirst: ["What would you need to know first?", "¿Qué necesitarías saber primero?"], hidden: ["Hidden details", "Detalles ocultos"], accurate: ["A more accurate version", "Una versión más exacta"],
+    model: ["Compare with a model answer", "Comparar con una respuesta modelo"], writeMore: ["Write a little more to unlock the model.", "Escribe un poco más para desbloquear el modelo."],
+    evaluate: ["Your judgment", "Tu juicio"], frame: ["Sentence starter", "Inicio de oración"], selfCheck: ["Self-check", "Autoevaluación"], college: ["College challenge", "Reto universitario"], transfer: ["Beyond the classroom", "Fuera del salón"],
+    done: ["Case complete", "Caso completo"], nextCase: ["Next case", "Siguiente caso"], prevStep: ["Previous", "Anterior"], nextStep: ["Next", "Siguiente"],
+    actEnglish: ["Activities are in English for now; use the Spanish transcript and vocabulary cards for support.", "Por ahora las actividades están en inglés; usa la transcripción en español y las tarjetas de vocabulario como apoyo."],
+    nbTitle: ["Detective Notebook", "Cuaderno del detective"], nbP: ["Everything you've tagged and written, in one place. Review it before you submit.", "Todo lo que has etiquetado y escrito, en un solo lugar. Revísalo antes de entregarlo."],
+    copy: ["Copy my work", "Copiar mi trabajo"], download: ["Download (.txt)", "Descargar (.txt)"], backup: ["Download a backup", "Descargar una copia de seguridad"], restore: ["Restore a backup", "Restaurar una copia"], clear: ["Delete all my work", "Borrar todo mi trabajo"],
+    copied: ["Copied. Paste it into a Google Doc or Canvas.", "Copiado. Pégalo en un documento de Google o en Canvas."], downloaded: ["Downloaded.", "Descargado."],
+    submit: ["To turn it in: Copy or Download, paste into a Google Doc, then submit it in Canvas.", "Para entregarlo: copia o descarga, pégalo en un documento de Google y entrégalo en Canvas."],
+    empty: ["Nothing here yet. Open a case to start collecting evidence.", "Todavía no hay nada aquí. Abre un caso para empezar a reunir evidencia."],
+    rpTitle: ["Advertising Investigation Report", "Informe de investigación publicitaria"], rpP: ["Analyze an ad you haven't studied yet. Your report contains only your own words.", "Analiza un anuncio que todavía no hayas estudiado. Tu informe contiene solo tus propias palabras."],
+    rpStory: ["The \u201cOpen Shelf\u201d library storyboard", "El guion gráfico de la biblioteca \u201cEstante abierto\u201d"], rpReal: ["A real ad I've seen", "Un anuncio real que he visto"], rpRealP: ["Describe the ad: where you saw it, what you saw and heard, and any words on screen.", "Describe el anuncio: dónde lo viste, qué viste y oíste, y las palabras en pantalla."],
+    rubric: ["Rubric", "Rúbrica"], copyReport: ["Copy my report", "Copiar mi informe"], dlReport: ["Download my report", "Descargar mi informe"],
+    restoreOK: ["Backup restored.", "Copia restaurada."], restoreBad: ["That file isn't an Ad Detective backup.", "Ese archivo no es una copia de Ad Detective."],
+    confirmClear: ["Delete all your Ad Detective work in this browser? Download a backup first if you want to keep it.", "¿Borrar todo tu trabajo de Ad Detective en este navegador? Descarga una copia primero si quieres conservarlo."],
+    fictional: ["All brands, people, products, and statistics in these ads are invented for instruction.", "Todas las marcas, personas, productos y estadísticas de estos anuncios son inventados para la clase."]
+  };
+  const u = k => T(U[k]);
+
+  /* ---------- progress ---------- */
+  const objIdx = c => c.analyze.map((x, i) => i).filter(i => ["mc", "sort", "judge", "option", "inspect", "rewrite"].includes(c.analyze[i].type));
+  function solved(c, i) {
+    const a = A(c.id, i), it = c.analyze[i];
+    if (it.type === "mc") return a.ok === true;
+    if (it.type === "sort" || it.type === "judge") return it.items.every((x, j) => a.v && a.v[j] === x[1]);
+    if (it.type === "option") return !!a.rev;
+    if (it.type === "inspect") return it.items.every((x, j) => a.rev && a.rev[j]);
+    if (it.type === "rewrite") return !!a.rev;
+    return false;
+  }
+  function wsSolved(c) { const w = A(c.id, "ws"); return c.moments.every((m, j) => w.v && m.tags.includes(w.v[j])) && words(w.p1) >= 5 && words(w.p2) >= 5 && words(w.rw) >= 20 && words(w.cc) >= 4; }
+  function segs(c) {
+    const st = C(c.id), tagged = c.moments.filter((m, j) => (st.tags[j] || []).length && st.cmp[j]).length;
+    return [st.brief, st.watched, tagged >= Math.min(3, c.moments.length), c.workspace ? wsSolved(c) : objIdx(c).every(i => solved(c, i)), words(A(c.id, "eval").t) >= 15];
+  }
+  function ring(c, size) {
+    const s = segs(c), n = s.length, r = size / 2 - 4, cx = size / 2, gap = 0.08;
+    const arc = k => { const a0 = (k / n) * 2 * Math.PI + gap - Math.PI / 2, a1 = ((k + 1) / n) * 2 * Math.PI - gap - Math.PI / 2; return `M ${cx + r * Math.cos(a0)} ${cx + r * Math.sin(a0)} A ${r} ${r} 0 0 1 ${cx + r * Math.cos(a1)} ${cx + r * Math.sin(a1)}`; };
+    const doneN = s.filter(Boolean).length;
+    return `<svg class="ring" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${E(`${doneN} / ${n}`)}">${s.map((ok, k) => `<path d="${arc(k)}" class="${ok ? "on" : ""}"/>`).join("")}<text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle">${c.id}</text></svg>`;
+  }
+
+  /* ---------- shell ---------- */
+  function shell(main) {
+    const r = route();
+    const nav = [["#/", "cases"], ["#/notebook", "notebook"], ["#/report", "report"], ["#/glossary", "glossary"], ["#/teacher", "teacher"]];
+    return `<a class="skip" href="#main" data-skip>${u("skip")}</a>
+    <header class="top"><div class="wrap topin">
+      <a class="brand" href="#/"><svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><circle cx="13" cy="13" r="9" fill="none" stroke="currentColor" stroke-width="3"/><path d="M20 20l8 8" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><path d="M9 13h8" stroke="var(--evidence)" stroke-width="3" stroke-linecap="round"/></svg><span><b>Ad Detective</b><small>${es() ? "El arte de la persuasión" : "The Art of Persuasion"}</small></span></a>
+      <nav aria-label="${es() ? "Principal" : "Main"}"><ul>${nav.map(([h, k]) => `<li><a href="${h}"${(r.name === (h.slice(2) || "home") || (k === "cases" && r.name === "case")) ? ' aria-current="page"' : ""}>${u(k)}</a></li>`).join("")}</ul></nav>
+      <div class="switches">
+        <div class="seg" role="group" aria-label="Language / Idioma"><button type="button" data-lang="en" aria-pressed="${!es()}">English</button><button type="button" data-lang="es" aria-pressed="${es()}">Español</button></div>
+        <div class="seg" role="group" aria-label="${u("level")}"><button type="button" data-level="hs" aria-pressed="${S.level === "hs"}">${u("hs")}</button><button type="button" data-level="col" aria-pressed="${S.level === "col"}">${u("col")}</button></div>
+      </div></div></header>
+    ${storageOK ? "" : `<p class="warn wrap" role="alert">${u("noStorage")}</p>`}
+    <main id="main" tabindex="-1">${main}</main>
+    <footer class="foot"><div class="wrap"><p>${u("fictional")}</p><p>${u("privacy")}</p><p>${es() ? "Compañero de" : "A companion to"} <a href="https://stevenbennett-hub.github.io/speaking-lab/">The Speaking Lab</a>.</p></div></footer>`;
+  }
+
+  /* ---------- home ---------- */
+  function home() {
+    return `<section class="hero"><div class="wrap herogrid">
+      <div class="herotext"><h1>Ad Detective</h1><p class="sub">${u("tagline")}</p><p class="lede">${u("heroP")}</p>
+        <div class="row"><a class="btn primary" href="#/case/${nextCaseId()}">${nextCaseId() === 1 && !C(1).brief ? u("startCase1") : u("cont")}</a></div></div>
+      <figure class="specimen" aria-labelledby="spec-cap">
+        <div class="frame" aria-hidden="true"><div class="beam"></div><svg class="bottle" viewBox="0 0 60 140"><rect x="22" y="2" width="16" height="16" rx="3"/><path d="M18 22h24l4 14v96a6 6 0 0 1-6 6H20a6 6 0 0 1-6-6V36z"/><rect class="lbl" x="14" y="62" width="32" height="34"/></svg>
+          <p class="slogan">Built for Champions.</p><p class="fine">Hydration drink. Not a substitute for training.</p>
+          <span class="note n1"><i>${es() ? "Evidencia" : "Evidence"}</i>${es() ? "El producto aparece justo en el punto de giro." : "The product appears right at the turning point."}</span>
+          <span class="note n2"><i>${es() ? "Falla" : "Flaw"}</i>${es() ? "Implica que la bebida causó la victoria." : "Implies the drink caused the win."}</span>
+          <span class="note n3"><i>${es() ? "Sólido" : "Sound"}</i>${es() ? "La letra pequeña es honesta." : "The fine print is honest."}</span></div>
+        <figcaption id="spec-cap">${es() ? "Así se ve una investigación: una escena del Caso 1 con tres notas. Evidencia (ámbar): el producto aparece justo en el punto de giro. Falla (coral): implica que la bebida causó la victoria. Sólido (verde azulado): la letra pequeña es honesta." : "What an investigation looks like: a frame from Case 1 with three notes. Evidence (amber): the product appears right at the turning point. Flaw (coral): it implies the drink caused the win. Sound (teal): the fine print is honest."} <button type="button" class="linkbtn" data-replay>${u("replay")}</button></figcaption>
+      </figure></div></section>
+    <section class="wrap block"><h2>${u("cases")}</h2><ol class="caselist">${D.CASES.map(c => `<li><a href="#/case/${c.id}" class="caserow">${ring(c, 56)}<span><span class="cname">${E(T(c.title))}</span><span class="cfocus">${E(T(c.focus))}</span></span></a></li>`).join("")}
+      <li><a href="#/report" class="caserow final"><span class="ringph" aria-hidden="true">7</span><span><span class="cname">${u("rpTitle")}</span><span class="cfocus">${es() ? "Evaluación final" : "Final assessment"}</span></span></a></li></ol></section>
+    <section class="wrap block"><h2>${u("distinct")}</h2><div class="distinct">${D.DISTINCT.map(d => `<div class="dk dk-${d.k}"><h3>${E(T(d.n))}</h3><p>${E(T(d.d))}</p><p class="dq">${E(T(d.q))}</p></div>`).join("")}</div></section>
+    <section class="wrap block"><h2>${u("cycle")}</h2><ol class="cycle">${U.steps.map((s, i) => `<li><b>${E(T(s))}</b><span>${E(T(U.stepsHelp[i]))}</span></li>`).join("")}</ol><p class="muted">${u("privacy")}</p></section>`;
+  }
+  const nextCaseId = () => (D.CASES.find(c => !segs(c).every(Boolean)) || D.CASES[0]).id;
+
+  /* ---------- case ---------- */
+  const KIND = { v: "see", n: "hear", x: "onscreen", s: "sound" };
+  function video(c) {
+    return `<div class="player"><video id="vid" controls preload="metadata" playsinline crossorigin="anonymous" data-case="${c.id}">
+      <source src="${D.MEDIA_DIR}${c.file}.mp4" type="video/mp4">
+      <track kind="captions" srclang="en" label="English" src="${D.CAPTION_DIR}${c.file}.en.vtt"${es() ? "" : " default"}>
+      <track kind="captions" srclang="es" label="Español" src="${D.CAPTION_DIR}${c.file}.es.vtt"${es() ? " default" : ""}>
+    </video><div class="placeholder" id="ph" hidden><svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="4" y="10" width="40" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M20 18l10 6-10 6z" fill="currentColor"/></svg><p>${u("videoMissing")}</p></div></div>`;
+  }
+  function transcript(c) {
+    return `<div class="transcript"><h3>${u("transcript")} <span class="muted">(${mmss(c.dur)})</span></h3><ol>${c.transcript.map(r => `<li class="tk-${r[1]}"><button type="button" class="ts" data-seek="${r[0]}" aria-label="${u("seek")} ${mmss(r[0])}">${mmss(r[0])}</button><span class="kind">${u(KIND[r[1]])}</span><span class="tx">${E(es() ? r[3] : r[2])}${es() ? `<span class="orig" lang="en">${E(r[2])}</span>` : ""}</span></li>`).join("")}</ol></div>`;
+  }
+  function tagChips(c, j, key) {
+    const sel = (key ? (A(c.id, "ws").v || {})[j] : null);
+    if (key) return `<label class="sr" for="ws-${j}">${u("choose")}</label><select id="ws-${j}" data-ws="${j}"><option value="">${u("choose")}</option>${D.TAGS.map(t => `<option value="${t.id}"${sel === t.id ? " selected" : ""}>${E(T(t.n))}</option>`).join("")}</select>`;
+    const mine = C(c.id).tags[j] || [];
+    return `<div class="chips" role="group" aria-label="${es() ? "Técnicas" : "Techniques"}">${D.TAGS.map(t => `<button type="button" class="chip t-${t.tone}" data-tag="${t.id}" data-m="${j}" aria-pressed="${mine.includes(t.id)}">${E(T(t.n))}</button>`).join("")}</div>`;
+  }
+  function evidence(c) {
+    const st = C(c.id), own = S.custom[c.id] || [];
+    return `<p class="lead">${u("evidenceP")}</p><ol class="cards">${c.moments.map((m, j) => {
+      const mine = st.tags[j] || [], cmp = st.cmp[j];
+      const both = m.tags.filter(t => mine.includes(t)), missed = m.tags.filter(t => !mine.includes(t)), extra = mine.filter(t => !m.tags.includes(t));
+      const nm = id => E(T(D.TAGS.find(t => t.id === id).n));
+      return `<li class="card${mine.length ? " tagged" : ""}"><div class="ch"><button type="button" class="ts" data-seek="${m.t}">${mmss(m.t)}</button><span class="mq">${E(X(m.q))}</span></div>${tagChips(c, j)}
+        <label class="lbl" for="why-${c.id}-${j}">${u("whyNote")}</label><textarea id="why-${c.id}-${j}" rows="2" data-why="${j}">${E(st.why[j] || "")}</textarea>
+        <button type="button" class="btn sm" data-cmp="${j}"${mine.length ? "" : " disabled"}>${u("compare")}</button>
+        <div class="cmp" aria-live="polite">${cmp ? `${both.length ? `<p class="ok"><b>${u("both")}:</b> ${both.map(nm).join(", ")}</p>` : ""}${missed.length ? `<p class="miss"><b>${u("missed")}:</b> ${missed.map(nm).join(", ")}</p>` : ""}${extra.length ? `<p class="extra"><b>${u("extra")}:</b> ${extra.map(nm).join(", ")}. ${u("extraNote")}</p>` : ""}<p class="why">${E(X(m.why))}</p>` : ""}</div></li>`; }).join("")}</ol>
+      <details class="own"><summary>${u("addOwn")}</summary><div class="ownform">
+        <label class="lbl" for="own-line">${u("ownLine")}</label><select id="own-line">${c.transcript.filter(r => r[1] !== "s").map((r, k) => `<option value="${k}">${mmss(r[0])} ${E((es() ? r[3] : r[2]).slice(0, 70))}${(r[2].length > 70) ? "…" : ""}</option>`).join("")}</select>
+        <label class="lbl" for="own-why">${u("whyNote")}</label><textarea id="own-why" rows="2"></textarea>
+        <button type="button" class="btn sm" data-addown="${c.id}">${u("addCard")}</button></div>
+        ${own.length ? `<ul class="ownlist">${own.map((o, k) => `<li><q>${E(o.q)}</q> <span>${E(o.why)}</span> <button type="button" class="linkbtn" data-delown="${k}">${u("remove")}</button></li>`).join("")}</ul>` : ""}</details>`;
+  }
+  function mcView(c, i, it) {
+    const a = A(c.id, i), sel = a.sel;
+    const fb = sel != null ? it.o[sel] : null;
+    return `<fieldset class="q"><legend>${E(X(it.q))}</legend><div class="opts">${it.o.map((o, k) => `<label class="opt${sel === k ? (o[2] ? " right" : " wrong") : ""}${a.ok && o[2] ? " right" : ""}"><input type="radio" name="q-${c.id}-${i}" value="${k}" data-mc="${i}"${sel === k ? " checked" : ""}${a.ok ? " disabled" : ""}><span>${E(X(o[0]))}</span></label>`).join("")}</div>
+      <div class="fb" aria-live="polite">${fb ? `<p class="${fb[2] ? "ok" : "no"}"><b>${fb[2] ? (es() ? "Así es." : "Strong reasoning.") : u("tryAgain")}</b> ${E(X(fb[1]))}</p>` : ""}
+      ${!a.ok && (a.tries || 0) >= 1 ? `<p class="hintp"><b>${es() ? "Pista:" : "Hint:"}</b> ${E(X(it.hint))}</p>` : ""}
+      ${!a.ok && (a.tries || 0) >= 2 ? `<button type="button" class="linkbtn" data-showans="${i}">${u("showAns")}</button>` : ""}</div></fieldset>`;
+  }
+  function gridView(c, i, it) {
+    const a = A(c.id, i), v = a.v || {}, n = a.n || 0, opts = it.type === "sort" ? it.cats : it.opts;
+    const allOk = it.items.every((x, j) => v[j] === x[1]);
+    return `<fieldset class="q"><legend>${E(X(it.q))}</legend><ol class="grid">${it.items.map((x, j) => { const chk = n > 0 && v[j], ok = v[j] === x[1];
+      return `<li><span class="item">${E(X(x[0]))}</span><label class="sr" for="g-${c.id}-${i}-${j}">${u("choose")}</label><select id="g-${c.id}-${i}-${j}" data-grid="${i}" data-j="${j}"${allOk ? " disabled" : ""}><option value="">${u("choose")}</option>${opts.map(o => `<option value="${o[0]}"${v[j] === o[0] ? " selected" : ""}>${E(X(o[1]))}</option>`).join("")}</select>
+        ${chk ? `<p class="${ok ? "ok" : "no"}">${ok ? E(X(x[2])) : (n >= 2 ? `${es() ? "Respuesta:" : "Answer:"} <b>${E(X(opts.find(o => o[0] === x[1])[1]))}</b>. ${E(X(x[2]))}` : (es() ? "Todavía no. Vuelve a mirar esta." : "Not yet. Take another look at this one."))}</p>` : ""}</li>`; }).join("")}</ol>
+      ${allOk ? `<p class="ok" aria-live="polite"><b>${es() ? "¡Todas correctas!" : "All correct."}</b></p>` : `<div class="row"><button type="button" class="btn sm" data-gridchk="${i}">${u("check")}</button>${n >= 1 ? `<span class="hintp"><b>${es() ? "Pista:" : "Hint:"}</b> ${E(X(it.hint))}</span>` : ""}</div>`}</fieldset>`;
+  }
+  function optionView(c, i, it) {
+    const a = A(c.id, i), lines = String(a.t || "").split("\n").filter(s => s.trim()).length;
+    return `<fieldset class="q"><legend>${E(X(it.q))}</legend><label class="sr" for="opt-${c.id}-${i}">${E(X(it.q))}</label><textarea id="opt-${c.id}-${i}" rows="4" data-text="${i}" placeholder="${es() ? "Una opción por línea" : "One option per line"}">${E(a.t || "")}</textarea>
+      ${a.rev ? `<div class="reveal"><h4>${es() ? "Lista del investigador" : "Investigator's list"}</h4><ul>${it.reveal.map(r => `<li>${E(X(r))}</li>`).join("")}</ul></div>` : `<button type="button" class="btn sm" data-rev="${i}"${lines >= 3 ? "" : " disabled"}>${u("compareList")}</button>${lines < 3 ? ` <span class="muted">${es() ? "Escribe al menos tres, una por línea." : "Write at least three, one per line."}</span>` : ""}`}</fieldset>`;
+  }
+  function inspectView(c, i, it) {
+    const a = A(c.id, i); a.need = a.need || {}; a.rev = a.rev || {};
+    return `<fieldset class="q"><legend>${E(X(it.q))}</legend><ol class="inspect">${it.items.map((x, j) => `<li><p class="claim">${E(X(x[0]))}</p>
+      <label class="lbl" for="need-${c.id}-${j}">${u("needFirst")}</label><textarea id="need-${c.id}-${j}" rows="2" data-need="${i}" data-j="${j}">${E(a.need[j] || "")}</textarea>
+      ${a.rev[j] ? `<div class="reveal"><p><b>${u("hidden")}:</b> ${E(X(x[1]))}</p><p><b>${u("accurate")}:</b> ${E(X(x[2]))}</p></div>` : `<button type="button" class="btn sm" data-insp="${i}" data-j="${j}"${words(a.need[j]) >= 3 ? "" : " disabled"}>${u("reveal")}</button>`}</li>`).join("")}</ol></fieldset>`;
+  }
+  function rewriteView(c, i, it) {
+    const a = A(c.id, i); a.chk = a.chk || {};
+    return `<fieldset class="q"><legend>${E(X(it.q))}</legend><p class="frame"><b>${u("frame")}:</b> ${E(X(it.frame))}</p><label class="sr" for="rw-${c.id}-${i}">${E(X(it.q))}</label><textarea id="rw-${c.id}-${i}" rows="3" data-text="${i}">${E(a.t || "")}</textarea>
+      <div class="checks">${it.check.map((k, j) => `<label><input type="checkbox" data-chk="${i}" data-j="${j}"${a.chk[j] ? " checked" : ""}> ${E(X(k))}</label>`).join("")}</div>
+      ${a.rev ? `<div class="reveal"><h4>${es() ? "Un modelo (hay muchas respuestas buenas)" : "One model (many good answers exist)"}</h4><p>${E(X(it.model))}</p></div>` : `<button type="button" class="btn sm" data-rev="${i}"${words(a.t) >= 8 ? "" : " disabled"}>${u("model")}</button>${words(a.t) >= 8 ? "" : ` <span class="muted">${u("writeMore")}</span>`}`}</fieldset>`;
+  }
+  function writeBox(c, key, cfg, rows) {
+    const a = A(c.id, key); a.chk = a.chk || {};
+    return `<div class="write"><label class="lbl" for="w-${c.id}-${key}">${E(X(cfg.q))}</label>${cfg.frame ? `<button type="button" class="linkbtn frame" data-frame="${key}" data-f="${E(X(cfg.frame))}">${u("frame")}: ${E(X(cfg.frame))}</button>` : ""}
+      <textarea id="w-${c.id}-${key}" rows="${rows || 4}" data-w="${key}">${E(a.t || "")}</textarea><p class="count" id="cnt-${c.id}-${key}">${words(a.t)} ${es() ? "palabras" : "words"}</p>
+      ${cfg.check ? `<fieldset class="checks"><legend>${u("selfCheck")}</legend>${cfg.check.map((k, j) => `<label><input type="checkbox" data-wchk="${key}" data-j="${j}"${a.chk[j] ? " checked" : ""}> ${E(X(k))}</label>`).join("")}</fieldset>` : ""}</div>`;
+  }
+  function workspace(c) {
+    const w = A(c.id, "ws"); w.v = w.v || {};
+    const n = w.n || 0;
+    return `<p class="lead">${es() ? "Eres el consultor. Completa los cinco pasos." : "You're the consultant. Complete all five steps."}</p>
+      <fieldset class="q"><legend>1. ${es() ? "Identifica la estrategia principal de cada momento" : "Identify the main strategy in each moment"}</legend><ol class="grid">${c.moments.map((m, j) => { const ok = m.tags.includes(w.v[j]);
+        return `<li><span class="item"><button type="button" class="ts" data-seek="${m.t}">${mmss(m.t)}</button> ${E(X(m.q))}</span>${tagChips(c, j, true)}${n > 0 && w.v[j] ? `<p class="${ok ? "ok" : "no"}">${ok ? E(X(m.why)) : (es() ? "Todavía no. ¿Qué hace realmente esta línea?" : "Not yet. What is this line really doing?")}</p>` : ""}</li>`; }).join("")}</ol><button type="button" class="btn sm" data-wschk>${u("check")}</button></fieldset>
+      ${["p1", "p2"].map((k, x) => `<div class="write"><label class="lbl" for="ws-${k}">${x + 2}. ${es() ? `Explica el problema ${x + 1} y por qué importa` : `Explain problem ${x + 1} and why it matters`}</label><button type="button" class="linkbtn frame" data-wsframe="${k}" data-f="${es() ? "La línea &quot;___&quot; es un problema porque ___." : "The line &quot;___&quot; is a problem because ___."}">${u("frame")}: ${es() ? "La línea \"___\" es un problema porque ___." : "The line \"___\" is a problem because ___."}</button><textarea id="ws-${k}" rows="3" data-wsw="${k}">${E(w[k] || "")}</textarea></div>`).join("")}
+      <div class="write"><label class="lbl" for="ws-rw">4. ${es() ? "Reescribe la narración con persuasión ética" : "Rewrite the narration using ethical persuasion"}</label><textarea id="ws-rw" rows="6" data-wsw="rw">${E(w.rw || "")}</textarea><p class="count" id="cnt-ws-rw">${words(w.rw)} ${es() ? "palabras" : "words"}</p></div>
+      <div class="write"><label class="lbl" for="ws-cc">5. ${es() ? "Una afirmación creíble o evidencia matizada que incluiste" : "One credible claim or qualified evidence you included"}</label><textarea id="ws-cc" rows="2" data-wsw="cc">${E(w.cc || "")}</textarea></div>
+      ${w.rev ? `<div class="reveal"><h4>${es() ? "Un modelo (hay muchas respuestas buenas)" : "One model (many good answers exist)"}</h4><p>${E(X(c.model))}</p></div>` : `<button type="button" class="btn sm" data-wsrev${words(w.rw) >= 20 ? "" : " disabled"}>${u("model")}</button>${words(w.rw) >= 20 ? "" : ` <span class="muted">${u("writeMore")}</span>`}`}`;
+  }
+  function caseView(id) {
+    const c = D.CASES.find(x => x.id === id); if (!c) return notFound();
+    const st = C(id), s = segs(c), step = Math.min(4, Math.max(0, +(st.step || 0)));
+    const stepBody = [
+      () => `<p class="lead">${E(T(c.mission))}</p><dl class="meta"><dt>${u("focus")}</dt><dd>${E(T(c.focus))}</dd><dt>${u("target")}</dt><dd>${E(T(c.target))}</dd></dl>
+        <h3>${u("keyWords")}</h3><div class="vocab">${c.vocab.map(v => vocabCard(D.VOCAB.find(x => x.id === v))).join("")}</div>
+        <h3>${u("worked")}</h3><p class="example">${E(X(c.example))}</p>
+        ${st.brief ? "" : `<button type="button" class="btn primary" data-begin>${u("begin")}</button>`}`,
+      () => `<p class="lead">${E(T(c.ad))}</p>${video(c)}${transcript(c)}<button type="button" class="btn${st.watched ? "" : " primary"}" data-watched aria-pressed="${st.watched}">${st.watched ? "✓ " + u("watchedDone") : u("watched")}</button>`,
+      () => `${video(c)}${evidence(c)}`,
+      () => c.workspace ? workspace(c) : c.analyze.map((it, i) => ({ mc: mcView, sort: gridView, judge: gridView, option: optionView, inspect: inspectView, rewrite: rewriteView })[it.type](c, i, it)).join(""),
+      () => `${writeBox(c, "eval", c.evaluate, 5)}${S.level === "col" ? `<section class="colbox"><h3>${u("college")}</h3>${writeBox(c, "col", c.college, 5)}</section>` : ""}<section class="xfer"><h3>${u("transfer")}</h3>${writeBox(c, "xfer", { q: c.transfer }, 3)}</section>
+        ${s.every(Boolean) ? `<p class="done" role="status">✓ ${u("done")}</p>` : ""}${id < 6 ? `<a class="btn primary" href="#/case/${id + 1}">${u("nextCase")}</a>` : `<a class="btn primary" href="#/report">${u("rpTitle")}</a>`}`
+    ];
+    return `<div class="wrap casehead"><p class="crumb"><a href="#/">${u("cases")}</a> / ${u("caseN")} ${id}</p><div class="ctitle">${ring(c, 64)}<div><h1>${E(T(c.title))}</h1><p class="sub">${E(T(c.ad))}</p></div></div>
+      <ol class="steps" role="tablist" aria-label="${es() ? "Pasos de la investigación" : "Investigation steps"}">${U.steps.map((n, k) => `<li role="presentation"><button type="button" role="tab" id="tab-${k}" aria-controls="panel" aria-selected="${k === step}" tabindex="${k === step ? 0 : -1}" data-step="${k}" class="${s[k] ? "complete" : ""}"><span class="sn">${k + 1}</span>${E(T(n))}${s[k] ? '<span class="sr"> ✓</span>' : ""}</button></li>`).join("")}</ol></div>
+      <section class="wrap panel" id="panel" role="tabpanel" aria-labelledby="tab-${step}" tabindex="-1"><h2>${E(T(U.steps[step]))}</h2>${stepBody[step]()}
+        <nav class="stepnav" aria-label="${es() ? "Navegación de pasos" : "Step navigation"}">${step > 0 ? `<button type="button" class="btn" data-step="${step - 1}">${u("prevStep")}</button>` : "<span></span>"}${step < 4 ? `<button type="button" class="btn primary" data-step="${step + 1}">${u("nextStep")}: ${E(T(U.steps[step + 1]))}</button>` : ""}</nav></section>`;
+  }
+  const vocabCard = v => v ? `<div class="vc"><p class="vt">${E(v.t[0])}${es() && v.t[1] !== v.t[0] ? ` <span lang="es">(${E(v.t[1])})</span>` : ""}</p><p>${E(T(v.d))}</p><p class="vx">${E(T(v.ex))}</p></div>` : "";
+
+  /* ---------- notebook ---------- */
+  function nbText() {
+    const out = ["AD DETECTIVE — " + T(U.nbTitle), (S.level === "col" ? "College challenge" : "High School") + " · " + new Date().toLocaleDateString(), ""];
+    D.CASES.forEach(c => {
+      const st = C(c.id), lines = [];
+      c.moments.forEach((m, j) => { const t = st.tags[j] || []; if (t.length || st.why[j]) lines.push(`  [${mmss(m.t)}] "${m.q}"\n     Tags: ${t.map(x => T(D.TAGS.find(y => y.id === x).n)).join(", ") || "—"}\n     Explanation: ${st.why[j] || "—"}`); });
+      (S.custom[c.id] || []).forEach(o => lines.push(`  [My evidence] "${o.q}"\n     Explanation: ${o.why}`));
+      c.analyze.forEach((it, i) => { const a = A(c.id, i); if (it.type === "option" && a.t) lines.push(`  Hidden options I found:\n     ${a.t.replace(/\n/g, "\n     ")}`); if (it.type === "rewrite" && a.t) lines.push(`  My rewrite: ${a.t}`); if (it.type === "inspect") it.items.forEach((x, j) => { if (a.need && a.need[j]) lines.push(`  ${x[0]} — What I'd need to know: ${a.need[j]}`); }); });
+      if (c.workspace) { const w = A(c.id, "ws"); ["p1", "p2", "rw", "cc"].forEach((k, x) => { if (w[k]) lines.push(`  ${["Problem 1", "Problem 2", "My rewrite", "Credible claim"][x]}: ${w[k]}`); }); }
+      [["eval", "My judgment"], ["col", "College challenge"], ["xfer", "Beyond the classroom"]].forEach(([k, n]) => { const t = A(c.id, k).t; if (t) lines.push(`  ${n}: ${t}`); });
+      if (lines.length) out.push(`CASE ${c.id}: ${T(c.title)}`, ...lines, "");
+    });
+    return out.join("\n");
+  }
+  function notebook() {
+    const any = D.CASES.some(c => Object.keys(C(c.id).tags).length || Object.keys(C(c.id).a).length);
+    return `<div class="wrap block"><h1>${u("nbTitle")}</h1><p class="lead">${u("nbP")}</p>
+      ${any ? D.CASES.map(c => { const st = C(c.id), cards = c.moments.map((m, j) => ({ m, j, t: st.tags[j] || [] })).filter(x => x.t.length || st.why[x.j]);
+        return `<section class="nbcase"><h2>${ring(c, 40)} ${E(T(c.title))}</h2>${cards.length || (S.custom[c.id] || []).length ? `<ul class="nbcards">${cards.map(x => `<li class="ecard"><span class="ts">${mmss(x.m.t)}</span><span class="mq">${E(X(x.m.q))}</span><p class="etags">${x.t.map(id => `<span class="etag t-${D.TAGS.find(t => t.id === id).tone}">${E(T(D.TAGS.find(t => t.id === id).n))}</span>`).join("")}</p>${st.why[x.j] ? `<p>${E(st.why[x.j])}</p>` : ""}</li>`).join("")}${(S.custom[c.id] || []).map(o => `<li class="ecard own"><q>${E(o.q)}</q><p>${E(o.why)}</p></li>`).join("")}</ul>` : `<p class="muted">${es() ? "Sin tarjetas de evidencia todavía." : "No evidence cards yet."}</p>`}
+        ${["eval", "col", "xfer"].map(k => A(c.id, k).t ? `<p class="nbw"><b>${k === "eval" ? u("evaluate") : k === "col" ? u("college") : u("transfer")}:</b> ${E(A(c.id, k).t)}</p>` : "").join("")}
+        <a href="#/case/${c.id}" class="linkbtn">${es() ? "Revisar este caso" : "Revise this case"}</a></section>`; }).join("") : `<p class="emptyst">${u("empty")} <a href="#/case/1">${u("startCase1")}</a></p>`}
+      <section class="exportbox"><h2>${es() ? "Entregar y guardar" : "Turn in and save"}</h2><p>${u("submit")}</p><div class="row"><button type="button" class="btn primary" data-nbcopy>${u("copy")}</button><button type="button" class="btn" data-nbdl>${u("download")}</button></div><p id="nbmsg" role="status" class="muted"></p>
+        <h3>${es() ? "Copia de seguridad" : "Backup"}</h3><div class="row"><button type="button" class="btn" data-backup>${u("backup")}</button><label class="btn filebtn">${u("restore")}<input type="file" accept="application/json,.json" data-restore class="sr"></label><button type="button" class="btn danger" data-clear>${u("clear")}</button></div><p class="muted">${u("privacy")}</p></section></div>`;
+  }
+
+  /* ---------- report ---------- */
+  function rpText() {
+    const r = S.report, out = ["ADVERTISING INVESTIGATION REPORT", (S.level === "col" ? "College challenge" : "High School") + " · " + new Date().toLocaleDateString(), "", "Ad analyzed: " + (r.choice === "real" ? "A real ad — " + (r.real || "(no description)") : T(D.FINAL_AD.title)), ""];
+    D.REPORT.forEach(f => out.push(X(f.n), (r.f[f.id] || "(not answered)"), ""));
+    return out.join("\n");
+  }
+  function report() {
+    const r = S.report, done = D.REPORT.filter(f => words(r.f[f.id]) >= 3).length;
+    return `<div class="wrap block"><h1>${u("rpTitle")}</h1><p class="lead">${u("rpP")}</p>
+      <fieldset class="seg big"><legend>${es() ? "¿Qué anuncio vas a analizar?" : "Which ad will you analyze?"}</legend><label><input type="radio" name="rpc" value="story" data-rpc${r.choice !== "real" ? " checked" : ""}> ${u("rpStory")}</label><label><input type="radio" name="rpc" value="real" data-rpc${r.choice === "real" ? " checked" : ""}> ${u("rpReal")}</label></fieldset>
+      ${r.choice === "real" ? `<div class="write"><label class="lbl" for="rp-real">${u("rpRealP")}</label><textarea id="rp-real" rows="4" data-rpreal>${E(r.real)}</textarea></div>` : `<section class="storyboard"><h2>${E(T(D.FINAL_AD.title))}</h2><p class="muted">${E(T(D.FINAL_AD.note))}</p><ol>${D.FINAL_AD.rows.map(x => `<li><span class="ts">${x[0]}</span><span>${E(es() ? x[2] : x[1])}${es() ? `<span class="orig" lang="en">${E(X(x[1]))}</span>` : ""}</span></li>`).join("")}</ol></section>`}
+      <p class="progressline" aria-live="polite">${done} / ${D.REPORT.length} ${es() ? "secciones" : "sections"}</p>
+      ${D.REPORT.map(f => `<div class="write"><label class="lbl" for="rp-${f.id}"><b>${E(X(f.n))}.</b> ${E(X(f.p))}</label><button type="button" class="linkbtn frame" data-rpframe="${f.id}" data-f="${E(X(f.frame))}">${u("frame")}: ${E(X(f.frame))}</button><textarea id="rp-${f.id}" rows="3" data-rpf="${f.id}">${E(r.f[f.id] || "")}</textarea></div>`).join("")}
+      <div class="row"><button type="button" class="btn primary" data-rpcopy>${u("copyReport")}</button><button type="button" class="btn" data-rpdl>${u("dlReport")}</button></div><p id="rpmsg" role="status" class="muted"></p><p class="muted">${u("submit")}</p>
+      <details class="rubric"><summary>${u("rubric")}</summary>${rubricTable()}</details></div>`;
+  }
+  const rubricTable = () => `<div class="tablewrap"><table><thead><tr><th scope="col">${es() ? "Criterio" : "Criterion"}</th><th scope="col">4</th><th scope="col">3</th><th scope="col">2</th><th scope="col">1</th></tr></thead><tbody>${D.RUBRIC.map(r => `<tr><th scope="row">${E(X(r[0]))}</th>${r.slice(1).map(x => `<td>${E(X(x))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+
+  /* ---------- glossary ---------- */
+  const glossary = () => `<div class="wrap block"><h1>${u("glossary")}</h1><p class="lead">${es() ? "Definiciones sencillas con ejemplos. El término en inglés se muestra para que lo uses en clase." : "Plain definitions with examples. Spanish terms are shown in Spanish mode."}</p><div class="vocab big">${D.VOCAB.map(vocabCard).join("")}</div><h2>${es() ? "Etiquetas de técnicas" : "Technique tags"}</h2><ul class="taglegend">${D.TAGS.map(t => `<li><span class="etag t-${t.tone}">${E(T(t.n))}</span></li>`).join("")}</ul><p class="muted">${es() ? "Ámbar: apelación. Coral: posible falla o afirmación engañosa. Verde azulado: afirmación honesta." : "Amber: an appeal. Coral: a possible flaw or misleading claim. Teal: an honest claim."}</p></div>`;
+
+  /* ---------- teacher ---------- */
+  function teacher() {
+    const pace = [["1", "Launch: central question and the four ideas (10). Case 1 (30). Case 2 (30). Partner discussion: \u201cIs emotion ever fair?\u201d (15)"], ["2", "Case 3 (30). Case 4 (30). Debrief the popularity test and false-dilemma rewrites (20)"], ["3", "Case 5 (35). Case 6 (40). Share two rewrites (10)"], ["4", "Advertising Investigation Report (60). Peer review with the rubric (20)"]];
+    const prompts = ["Case 1: When is an emotional appeal fair? Does the fine print change your answer?", "Case 2: Name a time an expert's opinion should change your mind. What made it trustworthy?", "Case 3: Is it ethical to sell belonging to teenagers? Who could be harmed?", "Case 4: Find a genuine two-option situation in your own life. How do you know it's genuine?", "Case 5: If every number is technically true, can an ad still be dishonest?", "Case 6: Read two classmates' rewrites aloud. Which is more persuasive, and is it still honest?"];
+    return `<div class="wrap block teacher"><h1>${es() ? "Recursos para el maestro" : "Teacher resources"}</h1>
+      <p class="lead">This page is visible to anyone, so it contains no answer keys. Full answer keys, production scripts, and instructor analysis are in your private planning document, \u201cAd Detective: The Art of Persuasion \u2014 Blueprint and Production Packages.\u201d A static website can't securely hide anything; keep that document shared only with co-teachers.</p>
+      <h2>Modules</h2><div class="tablewrap"><table><thead><tr><th scope="col">Case</th><th scope="col">Focus</th><th scope="col">Learning target</th></tr></thead><tbody>${D.CASES.map(c => `<tr><th scope="row">${c.id}. ${E(c.title[0])}</th><td>${E(c.focus[0])}</td><td>${E(c.target[0])}</td></tr>`).join("")}<tr><th scope="row">Final report</th><td>Transfer</td><td>Analyze a new ad: claim, audience, appeals, evidence, fallacies (or none), credibility, and an overall judgment.</td></tr></tbody></table></div>
+      <h2>Suggested pacing (90-minute blocks)</h2><ol class="plain">${pace.map(p => `<li><b>Block ${p[0]}:</b> ${E(p[1])}</li>`).join("")}</ol><p>Each case also works alone as a 30-minute warm-up or sub plan.</p>
+      <h2>Discussion prompts</h2><ul class="plain">${prompts.map(p => `<li>${E(p)}</li>`).join("")}</ul>
+      <h2>Differentiation</h2><ul class="plain"><li>Every case can be completed from the transcript alone; captions are available for every video.</li><li>Sentence starters sit above every written response; vocabulary cards show Spanish terms in Spanish mode.</li><li>No timers. Hints appear after one wrong answer, and the answer can be shown after two.</li><li>College challenge mode adds one deeper written task per case and longer self-checks; switch it on from the top bar.</li><li>Spanish mode translates everything students see: the interface, activities and feedback, transcripts, captions, and vocabulary. Quoted ad lines show the English original beside the Spanish in transcripts.</li></ul>
+      <h2>Formative assessment</h2><ul class="plain"><li>Progress rings show which of the five steps each student has completed.</li><li>Ask students to export their Notebook at the end of each block and submit it in Canvas.</li><li>Use \u201cOnly you tagged\u201d results as discussion starters: a defended extra tag can be a strong answer.</li></ul>
+      <h2>Final report rubric</h2>${rubricTable()}
+      <h2>Extensions</h2><ul class="plain"><li>Students bring a real ad (described in words) and run the full five-step investigation.</li><li>Compare two ads for the same kind of product aimed at different audiences.</li><li>Pair with the Speaking Lab's persuasive speech: apply the ethical-persuasion checklist to students' own calls to action.</li></ul>
+      <h2>Adding the videos</h2><p>Export each finished ad as MP4 and add it to <code>assets/videos/</code> with these names. Captions go in <code>assets/captions/</code>; draft caption files are already there and should be retimed to the final edit.</p>
+      <div class="tablewrap"><table><thead><tr><th scope="col">Case</th><th scope="col">Video</th><th scope="col">Captions</th></tr></thead><tbody>${D.CASES.map(c => `<tr><td>${c.id}</td><td><code>assets/videos/${c.file}.mp4</code></td><td><code>${c.file}.en.vtt</code>, <code>${c.file}.es.vtt</code></td></tr>`).join("")}</tbody></table></div>
+      <p>Until a video is added, its case shows a placeholder and students use the transcript.</p></div>`;
+  }
+  const notFound = () => `<div class="wrap block"><h1>${es() ? "No encontramos esa página" : "That page doesn't exist"}</h1><p><a href="#/">${es() ? "Volver a los casos" : "Back to the cases"}</a></p></div>`;
+
+  /* ---------- router & render ---------- */
+  function route() { const h = location.hash.replace(/^#\/?/, ""); const [a, b] = h.split("/"); if (!a) return { name: "home" }; if (a === "case") return { name: "case", id: +b }; return { name: a }; }
+  let lastRoute = "";
+  function render(focusSel) {
+    const r = route();
+    const main = r.name === "home" ? home() : r.name === "case" ? caseView(r.id) : r.name === "notebook" ? notebook() : r.name === "report" ? report() : r.name === "glossary" ? glossary() : r.name === "teacher" ? teacher() : notFound();
+    document.documentElement.lang = S.lang;
+    document.title = (r.name === "case" ? `${T(D.CASES.find(c => c.id === r.id)?.title || ["", ""])} | ` : "") + "Ad Detective";
+    const app = $("#app"); app.innerHTML = shell(main);
+    wireVideo();
+    const key = location.hash;
+    if (focusSel) { const el = $(focusSel); if (el) el.focus(); }
+    else if (key !== lastRoute) { const h = $("main h1") || $("#main"); if (lastRoute) { h.setAttribute("tabindex", "-1"); h.focus(); window.scrollTo(0, 0); } }
+    lastRoute = key;
+    if (r.name === "home") playSpecimen();
+  }
+  function playSpecimen() {
+    const f = $(".specimen"); if (!f) return;
+    const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    f.classList.remove("play"); f.classList.toggle("still", reduce); void f.offsetWidth; if (!reduce) f.classList.add("play");
+  }
+  function wireVideo() {
+    const v = $("#vid"); if (!v) return;
+    const src = v.querySelector("source"), ph = $("#ph");
+    let handled = false;
+    const missing = () => {
+      if (handled) return; handled = true; v.hidden = true; if (ph) ph.hidden = false;
+      // Distinguish "file not added yet" from "file exists but this browser can't play it".
+      fetch(src.src, { method: "HEAD" }).then(r => { if (r.ok && ph) ph.querySelector("p").textContent = u("cantPlay"); }).catch(() => {});
+    };
+    src.addEventListener("error", missing); v.addEventListener("error", missing);
+    v.addEventListener("ended", () => { const st = C(+v.dataset.case); if (!st.watched) { st.watched = true; save(); } });
+  }
+  function seek(t) { const v = $("#vid"); if (v && !v.hidden) { try { v.currentTime = t; v.play().catch(() => {}); v.focus(); } catch (e) {} } }
+  const curCase = () => { const r = route(); return r.name === "case" ? D.CASES.find(c => c.id === r.id) : null; };
+  function msg(sel, k) { const m = $(sel); if (m) m.textContent = u(k); }
+  async function copyText(t, sel) { try { await navigator.clipboard.writeText(t); msg(sel, "copied"); } catch (e) { const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); msg(sel, "copied"); } catch (e2) {} ta.remove(); } }
+  function dl(name, text, type) { const b = new Blob([text], { type: (type || "text/plain") + ";charset=utf-8" }), a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
+
+  /* ---------- events ---------- */
+  document.addEventListener("click", e => {
+    const t = e.target.closest("button, [data-skip]"); if (!t) return; const d = t.dataset, c = curCase();
+    if (d.skip !== undefined) { e.preventDefault(); $("#main").focus(); return; }
+    if (d.lang) { S.lang = d.lang; save(); return render(`[data-lang="${d.lang}"]`); }
+    if (d.level) { S.level = d.level; save(); return render(`[data-level="${d.level}"]`); }
+    if (d.replay !== undefined) return playSpecimen();
+    if (d.seek) return seek(+d.seek);
+    if (!c && !("nbcopy" in d || "nbdl" in d || "backup" in d || "clear" in d || "rpcopy" in d || "rpdl" in d || "rpframe" in d)) return;
+    if (d.step) { C(c.id).step = +d.step; save(); return render(`#tab-${d.step}`); }
+    if (d.begin !== undefined) { C(c.id).brief = true; C(c.id).step = 1; save(); return render("#tab-1"); }
+    if (d.watched !== undefined) { C(c.id).watched = !C(c.id).watched; save(); return render("[data-watched]"); }
+    if (d.tag) { const st = C(c.id), j = +d.m, arr = st.tags[j] = st.tags[j] || []; const k = arr.indexOf(d.tag); k >= 0 ? arr.splice(k, 1) : arr.push(d.tag); st.cmp[j] = false; save(); return render(`[data-tag="${d.tag}"][data-m="${j}"]`); }
+    if (d.cmp) { C(c.id).cmp[+d.cmp] = true; save(); return render(`[data-cmp="${d.cmp}"]`); }
+    if (d.addown) { const sel = $("#own-line"), why = $("#own-why").value.trim(); const rows = c.transcript.filter(r => r[1] !== "s"), row = rows[+sel.value]; if (!why) { $("#own-why").focus(); return; } (S.custom[c.id] = S.custom[c.id] || []).push({ q: `${mmss(row[0])} ${row[2]}`, why }); save(); render(); const det = $("details.own"); if (det) det.open = true; return; }
+    if (d.delown) { S.custom[c.id].splice(+d.delown, 1); save(); render(); const det = $("details.own"); if (det) det.open = true; return; }
+    if (d.showans) { const i = +d.showans, it = c.analyze[i], a = A(c.id, i); a.sel = it.o.findIndex(o => o[2]); a.ok = true; save(); return render(`input[data-mc="${i}"]`); }
+    if (d.gridchk) { const a = A(c.id, +d.gridchk); a.n = (a.n || 0) + 1; save(); return render(`[data-gridchk="${d.gridchk}"], select[data-grid="${d.gridchk}"]`); }
+    if (d.rev) { A(c.id, +d.rev).rev = true; save(); return render(); }
+    if (d.insp) { const a = A(c.id, +d.insp); a.rev = a.rev || {}; a.rev[+d.j] = true; save(); return render(`#need-${c.id}-${d.j}`); }
+    if (d.wschk !== undefined) { const w = A(c.id, "ws"); w.n = (w.n || 0) + 1; save(); return render("[data-wschk]"); }
+    if (d.wsrev !== undefined) { A(c.id, "ws").rev = true; save(); return render(); }
+    if (d.frame) { const a = A(c.id, d.frame); if (!a.t) { a.t = d.f + " "; save(); } return render(`#w-${c.id}-${d.frame}`); }
+    if (d.wsframe) { const w = A(c.id, "ws"); if (!w[d.wsframe]) { w[d.wsframe] = d.f + " "; save(); } return render(`#ws-${d.wsframe}`); }
+    if (d.rpframe) { if (!S.report.f[d.rpframe]) { S.report.f[d.rpframe] = d.f + " "; save(); } return render(`#rp-${d.rpframe}`); }
+    if ("nbcopy" in d) return copyText(nbText(), "#nbmsg");
+    if ("nbdl" in d) { dl("Ad_Detective_Notebook.txt", nbText()); return msg("#nbmsg", "downloaded"); }
+    if ("rpcopy" in d) return copyText(rpText(), "#rpmsg");
+    if ("rpdl" in d) { dl("Advertising_Investigation_Report.txt", rpText()); return msg("#rpmsg", "downloaded"); }
+    if ("backup" in d) { dl("ad-detective-backup.json", JSON.stringify({ app: "ad-detective", v: 1, at: new Date().toISOString(), state: S }, null, 2), "application/json"); return msg("#nbmsg", "downloaded"); }
+    if ("clear" in d) { if (confirm(u("confirmClear"))) { const keep = { lang: S.lang, level: S.level }; S = Object.assign(fresh(), keep); save(); render(); } return; }
+  });
+  document.addEventListener("change", e => {
+    const t = e.target, d = t.dataset, c = curCase();
+    if (d.restore !== undefined && t.files && t.files[0]) { const fr = new FileReader(); fr.onload = () => { try { const j = JSON.parse(fr.result); if (j.app !== "ad-detective" || !j.state) throw 0; S = Object.assign(fresh(), j.state); save(); render(); msg("#nbmsg", "restoreOK"); } catch (er) { msg("#nbmsg", "restoreBad"); } }; fr.readAsText(t.files[0]); return; }
+    if (d.rpc !== undefined) { S.report.choice = t.value; save(); return render(`input[data-rpc][value="${t.value}"]`); }
+    if (!c) return;
+    if (d.mc) { const i = +d.mc, it = c.analyze[i], a = A(c.id, i), k = +t.value; a.sel = k; if (it.o[k][2]) a.ok = true; else a.tries = (a.tries || 0) + 1; save(); return render(`input[data-mc="${i}"][value="${k}"]`); }
+    if (d.grid) { const a = A(c.id, +d.grid); a.v = a.v || {}; a.v[+d.j] = t.value; save(); return; }
+    if (d.ws) { const w = A(c.id, "ws"); w.v = w.v || {}; w.v[+d.ws] = t.value; save(); return; }
+    if (d.chk) { const a = A(c.id, +d.chk); a.chk = a.chk || {}; a.chk[+d.j] = t.checked; save(); return; }
+    if (d.wchk) { const a = A(c.id, d.wchk); a.chk = a.chk || {}; a.chk[+d.j] = t.checked; save(); return; }
+  });
+  document.addEventListener("input", e => {
+    const t = e.target, d = t.dataset, c = curCase();
+    if (d.rpf) { S.report.f[d.rpf] = t.value; save(); const p = $(".progressline"); if (p) p.textContent = `${D.REPORT.filter(f => words(S.report.f[f.id]) >= 3).length} / ${D.REPORT.length} ${es() ? "secciones" : "sections"}`; return; }
+    if (d.rpreal !== undefined) { S.report.real = t.value; save(); return; }
+    if (!c) return;
+    if (d.why) { C(c.id).why[+d.why] = t.value; save(); return; }
+    if (d.w) { A(c.id, d.w).t = t.value; save(); const n = $(`#cnt-${c.id}-${d.w}`); if (n) n.textContent = `${words(t.value)} ${es() ? "palabras" : "words"}`; return; }
+    if (d.text) { const i = +d.text, a = A(c.id, i); a.t = t.value; save(); const it = c.analyze[i]; const btn = $(`[data-rev="${i}"]`); if (btn) btn.disabled = it.type === "option" ? String(t.value).split("\n").filter(s => s.trim()).length < 3 : words(t.value) < 8; return; }
+    if (d.need) { const a = A(c.id, +d.need); a.need = a.need || {}; a.need[+d.j] = t.value; save(); const btn = $(`[data-insp="${d.need}"][data-j="${d.j}"]`); if (btn) btn.disabled = words(t.value) < 3; return; }
+    if (d.wsw) { const w = A(c.id, "ws"); w[d.wsw] = t.value; save(); if (d.wsw === "rw") { const n = $("#cnt-ws-rw"); if (n) n.textContent = `${words(t.value)} ${es() ? "palabras" : "words"}`; const b = $("[data-wsrev]"); if (b) b.disabled = words(t.value) < 20; } return; }
+  });
+  document.addEventListener("keydown", e => {
+    const t = e.target; if (t.getAttribute("role") !== "tab") return;
+    const tabs = [...document.querySelectorAll('[role="tab"]')], i = tabs.indexOf(t); let n = -1;
+    if (e.key === "ArrowRight") n = (i + 1) % tabs.length; else if (e.key === "ArrowLeft") n = (i - 1 + tabs.length) % tabs.length; else if (e.key === "Home") n = 0; else if (e.key === "End") n = tabs.length - 1;
+    if (n >= 0) { e.preventDefault(); tabs[n].click(); }
+  });
+  window.addEventListener("hashchange", () => render());
+  render();
+  window.__AD = { state: () => S, segs: id => segs(D.CASES.find(c => c.id === id)), nbText, rpText };
+})();
+
+</script>
+</body>
+</html>
