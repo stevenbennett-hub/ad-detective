@@ -35,16 +35,24 @@ html = f"""<!doctype html>
 
 # Draft captions (narration + sound cues), to be retimed against the final edit.
 cases = json.loads(subprocess.check_output(["node", "-e", "global.window={};require('./src/data.js');process.stdout.write(JSON.stringify(window.AD.CASES))"], cwd=root))
-def ts(s): return f"00:{int(s)//60:02d}:{int(s)%60:02d}.000"
+def ts(sec):
+    ms = int(round(sec * 1000)); h, ms = divmod(ms, 3600000); m, ms = divmod(ms, 60000); s_, ms = divmod(ms, 1000)
+    return f"{h:02d}:{m:02d}:{s_:02d}.{ms:03d}"
 for c in cases:
-    rows = [r for r in c["transcript"] if r[1] in ("n", "s")]
+    narr = [r for r in c["transcript"] if r[1] == "n"]
+    cues = []
+    for r in c["transcript"]:
+        if r[1] == "s":   # sound cues: shown on their own for about 3 seconds
+            cues.append((r[0], min(r[0] + 3.0, c["dur"]), r))
+        elif r[1] == "n": # narration: shown until the next line starts (max 6.5 s)
+            later = [x[0] for x in narr if x[0] > r[0]]
+            spoken = max(2.0, len(r[2].split()) / 2.6 + 0.8)   # about natural speaking pace, plus a moment to read
+            end = min(later[0] - 0.1 if later else r[0] + spoken, r[0] + spoken, c["dur"])
+            cues.append((r[0], end, r))
+    cues.sort(key=lambda x: x[0])
     for li, lang in ((2, "en"), (3, "es")):
-        out = ["WEBVTT", "", f"NOTE Draft captions for {c['file']}.mp4 generated from the transcript. Retime them to the final edit.", ""]
-        for k, r in enumerate(rows):
-            start = r[0]
-            nxt = [x[0] for x in rows[k + 1:] if x[0] > start]
-            end = min(nxt[0] if nxt else c["dur"] - 3, start + 6)
-            if end <= start: end = start + 3
-            out += [f"{ts(start)} --> {ts(end)}", r[li], ""]
+        out = ["WEBVTT", "", f"NOTE Captions for {c['file']}.mp4, generated from src/data.js. Start times match the final ElevenLabs cut; end times are estimated.", ""]
+        for st, en, r in cues:
+            out += [f"{ts(st)} --> {ts(en)}", r[li], ""]
         (root / f"assets/captions/{c['file']}.{lang}.vtt").write_text("\n".join(out), encoding="utf-8")
 print("built index.html", len(html), "bytes; captions:", len(list((root / "assets/captions").glob("*.vtt"))))

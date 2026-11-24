@@ -27,9 +27,11 @@ Export each finished ad from ElevenLabs Studio as **MP4 (H.264)**, ideally under
 
 No code changes are needed: the site finds each file by name. Until a video is added, its case shows a placeholder and students use the transcript. If a file exists but a browser can't play it, the site says so instead.
 
-**Captions:** the `.vtt` files in `assets/captions/` are drafts generated from the scripts, timed to the planned shot list. After you export each final video, play it with captions on and adjust any timestamps that drift (open the `.vtt` file in any text editor; each cue is `start --> end` followed by the text). If ElevenLabs Studio exports a caption file for the final edit, you can replace the English draft with it.
+**Captions:** the `.vtt` files in `assets/captions/` are generated from the final ElevenLabs cuts: every narration line and sound cue starts at the exact second it was placed in the composition. Cue end times are estimated, so if one lingers a little long or short, open the `.vtt` file in any text editor and adjust it (each cue is `start --> end` followed by the text).
 
-**Transcripts and timestamps:** each transcript row and evidence moment has a time in `src/data.js`. If your final edit shifts a moment by more than a second or two, update the number so the "jump to" buttons land correctly.
+**Transcripts and timestamps:** each transcript row and evidence moment has a time in `src/data.js`, matched to the final ElevenLabs cuts. If you ever re-edit an ad, update those numbers so the "jump to" buttons land correctly.
+
+**Uploading through the GitHub website:** the browser upload accepts files up to 25 MB each. If an exported ad is larger, compress it first (or ask for help).
 
 ## Edit content
 
