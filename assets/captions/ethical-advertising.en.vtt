@@ -1,27 +1,33 @@
 WEBVTT
 
-NOTE Draft captions for ethical-advertising.mp4 generated from the transcript. Retime them to the final edit.
+NOTE Captions for ethical-advertising.mp4, generated from src/data.js. Start times match the final ElevenLabs cut; end times are estimated.
 
-00:00:00.000 --> 00:00:06.000
+00:00:00.000 --> 00:00:03.000
 [Low, ominous drone.]
 
-00:00:00.000 --> 00:00:06.000
+00:00:00.400 --> 00:00:05.046
 Feeling tired? Foggy? Dehydration could be silently ruining your day.
 
-00:00:06.000 --> 00:00:12.000
+00:00:06.000 --> 00:00:09.000
+[The music flips to an upbeat pop track.]
+
+00:00:06.400 --> 00:00:10.662
 Meet Sipwarden, the smart bottle that tracks every sip.
 
-00:00:12.000 --> 00:00:18.000
+00:00:12.500 --> 00:00:14.838
 Trainer-approved by Jade Kessler.
 
-00:00:18.000 --> 00:00:24.000
+00:00:18.500 --> 00:00:21.992
 Sipwarden users report thirty-seven percent more energy.
 
-00:00:24.000 --> 00:00:30.000
-Join five million people who've already made the switch. Either you track your water, or you're guessing with your health.
+00:00:24.300 --> 00:00:27.500
+Join five million people who've already made the switch.
 
-00:00:30.000 --> 00:00:34.000
+00:00:27.600 --> 00:00:31.700
+Either you track your water, or you're guessing with your health.
+
+00:00:31.800 --> 00:00:36.400
 It holds twenty-four ounces and keeps drinks cold for twelve hours.
 
-00:00:34.000 --> 00:00:37.000
+00:00:36.500 --> 00:00:39.992
 Sipwarden. The last bottle you'll ever need.

@@ -1,27 +1,33 @@
 WEBVTT
 
-NOTE Draft captions for emotional-hook.mp4 generated from the transcript. Retime them to the final edit.
+NOTE Captions for emotional-hook.mp4, generated from src/data.js. Start times match the final ElevenLabs cut; end times are estimated.
 
-00:00:00.000 --> 00:00:01.000
-[Solo piano, slow and sparse. Distant wind.]
+00:00:00.000 --> 00:00:03.000
+[Soft stadium ambience. No music yet.]
 
-00:00:01.000 --> 00:00:06.000
+00:00:00.500 --> 00:00:03.608
 Nobody sees the five a.m. alarms.
 
-00:00:06.000 --> 00:00:10.000
-Nobody sees the rain. The doubt. The voice that says quit.
+00:00:06.500 --> 00:00:09.608
+Nobody sees the rain. The doubt.
 
-00:00:10.000 --> 00:00:13.000
-[Music stops. A single heartbeat, then another.]
+00:00:12.600 --> 00:00:15.300
+The voice that says… quit.
 
-00:00:13.000 --> 00:00:16.000
+00:00:15.400 --> 00:00:18.500
 They only see what you do next.
 
-00:00:16.000 --> 00:00:20.000
+00:00:18.000 --> 00:00:21.000
+[Inspirational music begins and builds.]
+
+00:00:18.600 --> 00:00:21.708
 Vimbright Rise. Fuel for the comeback.
 
-00:00:20.000 --> 00:00:22.000
-[Full orchestra and drums swell. The crowd roars.]
+00:00:24.000 --> 00:00:27.000
+[The music swells to a triumphant peak.]
 
-00:00:22.000 --> 00:00:28.000
-Rise again.
+00:00:25.000 --> 00:00:27.000
+[Whispered] Rise again.
+
+00:00:30.000 --> 00:00:33.000
+[The music resolves and fades out.]
