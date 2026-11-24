@@ -368,5 +368,22 @@ window.AD_ES = {
  "Organized and precise, with academic vocabulary; easy to follow": "Organizada y precisa, con vocabulario académico; fácil de seguir",
  "Clear, with mostly accurate vocabulary": "Clara, con vocabulario mayormente correcto",
  "Understandable but disorganized or imprecise": "Comprensible pero desorganizada o imprecisa",
- "Hard to follow": "Difícil de seguir"
+ "Hard to follow": "Difícil de seguir",
+ "The fall: “The voice that says… quit.”": "La caída: “La voz que dice… ríndete.”",
+ "The darkest line lands on the lowest moment, so the comeback and the product that follows feel bigger.": "La frase más oscura llega en el momento más bajo, así que el regreso y el producto que aparece después se sienten más grandes.",
+ "Why does the music start exactly when the drink appears?": "¿Por qué la música empieza justo cuando aparece la bebida?",
+ "Notice what you hear before the drink appears, and what you hear after.": "Fíjate en lo que oyes antes de que aparezca la bebida y en lo que oyes después.",
+ "Production cost isn't the reason; the timing is a deliberate creative choice.": "El costo de producción no es la razón; el momento elegido es una decisión creativa deliberada.",
+ "To link the drink with the emotional lift of the comeback": "Para relacionar la bebida con la emoción del regreso",
+ "Yes. Before the drink there's only quiet doubt; the music arrives with the product and builds to the victory, so the good feeling gets attached to the drink.": "Sí. Antes de la bebida solo hay una duda silenciosa; la música llega con el producto y crece hasta la victoria, así que el buen sentimiento queda unido a la bebida.",
+ "The race isn't over; she gets up and wins. The music is about emotion, not plot.": "La carrera no ha terminado; ella se levanta y gana. La música tiene que ver con la emoción, no con la trama.",
+ "The slow-motion fall and “the voice that says quit”": "La caída en cámara lenta y “la voz que dice: ríndete”",
+ "Slow motion and the timing of that line create a low point to rise from.": "La cámara lenta y el momento de esa frase crean un punto bajo desde el cual levantarse.",
+ "Costume and set signal science, though no evidence has been shown.": "El vestuario y el escenario sugieren ciencia, aunque no se ha mostrado ninguna evidencia.",
+ "“Recommended by Dr. Marcus Vey, PhD, Focus Expert”": "“Recomendado por el Dr. Marcus Vey, doctorado, experto en concentración”",
+ "“Focus Expert” is a title Brainmoor created for the ad, presented as if it were a credential.": "“Experto en concentración” es un título que Brainmoor inventó para el anuncio, presentado como si fuera una credencial.",
+ "The record scratch: the music stops dead": "El rayón de disco: la música se detiene en seco",
+ "The scratch turns not owning the shoes into an embarrassing social fail, even before the line lands.": "El rayón convierte el no tener los tenis en un fracaso social vergonzoso, incluso antes de que llegue la frase.",
+ "“The choice is yours” over the slogan slate": "“Tú decides” sobre la pantalla del eslogan",
+ "It offers “choice” right after insisting there are only two options.": "Ofrece “elegir” justo después de insistir en que solo hay dos opciones."
 };
